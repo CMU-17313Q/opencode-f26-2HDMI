@@ -121,6 +121,12 @@ describe("session involvement", () => {
     expect(rows[0]?.status).toBe("modified")
   })
 
+  test("keeps modified status for counts without a patch or status", () => {
+    const rows = toSessionInvolvementRows([{ file: "counts.ts", additions: 3, deletions: 0 }])
+
+    expect(rows[0]?.status).toBe("modified")
+  })
+
   test("returns no line ranges for a diff with no patch", () => {
     const rows = toSessionInvolvementRows([{ file: "untouched.ts", additions: 0, deletions: 0 }])
 
