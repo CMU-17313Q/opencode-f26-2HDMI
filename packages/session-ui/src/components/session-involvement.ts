@@ -28,7 +28,7 @@ function toRow(diff: SessionInvolvementDiff): SessionInvolvementRow {
     status: deriveStatus(view.status, view),
     additions: view.additions,
     deletions: view.deletions,
-    lineRanges: [],
+    lineRanges: hunkRanges(view),
   }
 }
 
@@ -42,4 +42,14 @@ function deriveStatus(
   if (before.length === 0 && after.length > 0) return "added"
   if (after.length === 0 && before.length > 0) return "deleted"
   return "modified"
+}
+
+function hunkRanges(view: ViewDiff): SessionInvolvementLineRange[] {
+  return view.fileDiff.hunks
+    .map((hunk) =>
+      hunk.additionCount > 0
+        ? { start: hunk.additionStart, end: hunk.additionStart + hunk.additionCount - 1 }
+        : { start: hunk.deletionStart, end: hunk.deletionStart + hunk.deletionCount - 1 },
+    )
+    .filter((range) => range.end >= range.start)
 }
