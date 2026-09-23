@@ -85,4 +85,12 @@ describe("session involvement", () => {
       { file: "old.ts", status: "deleted", additions: 0, deletions: 2, lineRanges: [{ start: 1, end: 2 }] },
     ])
   })
+
+  test("returns no line ranges for a diff with no patch", () => {
+    const rows = toSessionInvolvementRows([{ file: "untouched.ts", additions: 0, deletions: 0 }])
+
+    expect(rows).toEqual([
+      { file: "untouched.ts", status: "modified", additions: 0, deletions: 0, lineRanges: [] },
+    ])
+  })
 })
