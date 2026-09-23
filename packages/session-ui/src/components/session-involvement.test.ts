@@ -86,6 +86,24 @@ describe("session involvement", () => {
     ])
   })
 
+  test("derives deleted status from a null after side when status is missing", () => {
+    const patch = [
+      "diff --git a/old.ts b/old.ts",
+      "deleted file mode 100644",
+      "index 1a2b3c4..0000000",
+      "--- a/old.ts",
+      "+++ /dev/null",
+      "@@ -1,2 +0,0 @@",
+      "-line one",
+      "-line two",
+      "",
+    ].join("\n")
+
+    const rows = toSessionInvolvementRows([{ file: "old.ts", patch, additions: 0, deletions: 2 }])
+
+    expect(rows[0]?.status).toBe("deleted")
+  })
+
   test("returns no line ranges for a diff with no patch", () => {
     const rows = toSessionInvolvementRows([{ file: "untouched.ts", additions: 0, deletions: 0 }])
 
