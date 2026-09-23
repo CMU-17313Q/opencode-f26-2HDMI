@@ -27,4 +27,24 @@ describe("session involvement", () => {
       },
     ])
   })
+
+  test("maps a new file to a single addition-side range", () => {
+    const patch = [
+      "diff --git a/new.ts b/new.ts",
+      "new file mode 100644",
+      "index 0000000..1a2b3c4",
+      "--- /dev/null",
+      "+++ b/new.ts",
+      "@@ -0,0 +1,2 @@",
+      "+line one",
+      "+line two",
+      "",
+    ].join("\n")
+
+    const rows = toSessionInvolvementRows([{ file: "new.ts", patch, additions: 2, deletions: 0, status: "added" }])
+
+    expect(rows).toEqual([
+      { file: "new.ts", status: "added", additions: 2, deletions: 0, lineRanges: [{ start: 1, end: 2 }] },
+    ])
+  })
 })
