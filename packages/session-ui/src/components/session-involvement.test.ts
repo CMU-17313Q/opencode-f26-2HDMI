@@ -104,6 +104,23 @@ describe("session involvement", () => {
     expect(rows[0]?.status).toBe("deleted")
   })
 
+  test("keeps modified status for a file emptied without being deleted", () => {
+    const patch = [
+      "diff --git a/emptied.ts b/emptied.ts",
+      "index 1a2b3c4..5d6e7f8 100644",
+      "--- a/emptied.ts",
+      "+++ b/emptied.ts",
+      "@@ -1,2 +0,0 @@",
+      "-line one",
+      "-line two",
+      "",
+    ].join("\n")
+
+    const rows = toSessionInvolvementRows([{ file: "emptied.ts", patch, additions: 0, deletions: 2 }])
+
+    expect(rows[0]?.status).toBe("modified")
+  })
+
   test("returns no line ranges for a diff with no patch", () => {
     const rows = toSessionInvolvementRows([{ file: "untouched.ts", additions: 0, deletions: 0 }])
 
