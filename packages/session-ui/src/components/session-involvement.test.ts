@@ -65,4 +65,24 @@ describe("session involvement", () => {
 
     expect(rows[0]?.status).toBe("added")
   })
+
+  test("maps a deleted file to a single deletion-side range", () => {
+    const patch = [
+      "diff --git a/old.ts b/old.ts",
+      "deleted file mode 100644",
+      "index 1a2b3c4..0000000",
+      "--- a/old.ts",
+      "+++ /dev/null",
+      "@@ -1,2 +0,0 @@",
+      "-line one",
+      "-line two",
+      "",
+    ].join("\n")
+
+    const rows = toSessionInvolvementRows([{ file: "old.ts", patch, additions: 0, deletions: 2, status: "deleted" }])
+
+    expect(rows).toEqual([
+      { file: "old.ts", status: "deleted", additions: 0, deletions: 2, lineRanges: [{ start: 1, end: 2 }] },
+    ])
+  })
 })
