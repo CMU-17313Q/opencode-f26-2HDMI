@@ -27,6 +27,7 @@ import type { SnapshotFileDiff, VcsFileDiff } from "@opencode-ai/sdk/v2"
 import type { FileDiffInfo } from "@opencode-ai/client/promise"
 import { ConstrainDragYAxis, getDraggableId } from "@/utils/solid-dnd"
 import { useDialog } from "@opencode-ai/ui/context/dialog"
+import { SessionInvolvementSummary } from "@opencode-ai/session-ui/session-involvement-summary"
 
 import FileTree from "@/components/file-tree"
 import { normalizeFileTreeV2Path } from "@/components/file-tree-v2-model"
@@ -473,6 +474,9 @@ export function SessionSidePanel(props: {
                               data-slot="tabs-content"
                               class="flex flex-col h-full overflow-hidden contain-strict"
                             >
+                              <Show when={props.diffsReady()}>
+                                <SessionInvolvementSummary diffs={diffs()} />
+                              </Show>
                               {props.reviewPanel()}
                             </div>
                           </Show>
@@ -701,6 +705,9 @@ export function SessionSidePanel(props: {
                             data-slot="tabs-content"
                             class="flex flex-col h-full overflow-hidden contain-strict"
                           >
+                            <Show when={props.diffsReady()}>
+                              <SessionInvolvementSummary diffs={diffs()} />
+                            </Show>
                             {props.reviewPanel()}
                           </div>
                         </Show>
