@@ -16,11 +16,11 @@ export function SessionInvolvementSummary(props: { diffs: SessionInvolvementDiff
   return (
     <section
       data-component="session-involvement-summary"
-      aria-label={i18n.t("ui.sessionInvolvement.title")}
+      aria-label={i18n.t("ui.sessionReview.title")}
       class={`shrink-0 flex flex-col gap-2 px-4 py-3 border-b border-border-weak-base ${props.class ?? ""}`}
     >
       <div class="flex items-center justify-between gap-3">
-        <h2 class="text-12-medium text-text-strong">{i18n.t("ui.sessionInvolvement.title")}</h2>
+        <h2 class="text-12-medium text-text-strong">{i18n.t("ui.sessionReview.title")}</h2>
         <Show when={rows().length > 0}>
           <div data-slot="session-involvement-totals" class="flex items-center gap-2 text-12-regular text-text-weak">
             <span>{i18n.plural("ui.sessionTurn.diffs.changed", rows().length)}</span>
@@ -32,7 +32,7 @@ export function SessionInvolvementSummary(props: { diffs: SessionInvolvementDiff
         when={rows().length > 0}
         fallback={
           <div data-slot="session-involvement-empty" class="text-12-regular text-text-weak">
-            {i18n.t("ui.sessionInvolvement.empty")}
+            {i18n.t("ui.sessionReviewV2.empty.changes.title")}
           </div>
         }
       >
@@ -52,20 +52,13 @@ export function SessionInvolvementSummary(props: { diffs: SessionInvolvementDiff
                   <span data-slot="session-involvement-status" class="text-text-base">
                     {i18n.t(statusKey[row.status])}
                   </span>
-                  <Show
-                    when={row.lineRanges.length > 0}
-                    fallback={<span>{i18n.t("ui.sessionInvolvement.noLineRanges")}</span>}
-                  >
-                    <For each={row.lineRanges}>
-                      {(range) => (
-                        <span data-slot="session-involvement-range">
-                          {range.start === range.end
-                            ? i18n.t("ui.sessionInvolvement.line", { line: range.start })
-                            : i18n.t("ui.sessionInvolvement.lineRange", { start: range.start, end: range.end })}
-                        </span>
-                      )}
-                    </For>
-                  </Show>
+                  <For each={row.lineRanges}>
+                    {(range) => (
+                      <span data-slot="session-involvement-range" class="tabular-nums">
+                        {range.start === range.end ? range.start : `${range.start}–${range.end}`}
+                      </span>
+                    )}
+                  </For>
                 </div>
               </li>
             )}
