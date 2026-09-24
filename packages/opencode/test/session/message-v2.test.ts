@@ -1453,6 +1453,13 @@ describe("session.message-v2.fromError", () => {
 
     const result = MessageV2.fromError({ message: JSON.stringify(body) }, { providerID })
     expect(SessionV1.ContextOverflowError.isInstance(result)).toBe(true)
+
+    const topLevelBody = {
+      type: "error",
+      message: "The request contains too many tokens",
+    }
+    const topLevelResult = MessageV2.fromError({ message: JSON.stringify(topLevelBody) }, { providerID })
+    expect(SessionV1.ContextOverflowError.isInstance(topLevelResult)).toBe(true)
   })
 
   test("detects context overflow from APICallError provider messages", () => {
