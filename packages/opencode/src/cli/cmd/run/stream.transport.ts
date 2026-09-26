@@ -16,6 +16,7 @@
 // We also re-check live session status before resolving an idle event so a
 // delayed idle from an older turn cannot complete a newer busy turn.
 import type { Event, GlobalEvent, OpencodeClient } from "@opencode-ai/sdk/v2"
+import { SessionErrorMessage } from "@opencode-ai/core/session/error-message"
 import { Context, Deferred, Effect, Exit, Layer, Scope, Stream } from "effect"
 import { makeRuntime } from "@/effect/run-service"
 import {
@@ -248,6 +249,9 @@ function waitTurn(done: Wait["done"], signal: AbortSignal) {
 }
 
 export function formatUnknownError(error: unknown): string {
+  const contextOverflow = SessionErrorMessage.userFacingErrorMessage(error)
+  if (contextOverflow) return contextOverflow
+
   if (typeof error === "string") {
     return error
   }
