@@ -133,6 +133,10 @@ describe("run session data", () => {
     )
   })
 
+  test("keeps generic API error messages", () => {
+    expect(formatError({ name: "APIError", data: { message: "Request failed" } })).toBe("Request failed")
+  })
+
   test("buffers delayed assistant text until the role is known", () => {
     let data = createSessionData()
     data = reduce(data, delta("msg-1", "txt-1", "hello")).data
