@@ -1,7 +1,9 @@
 import { afterEach, describe, expect, mock, spyOn, test } from "bun:test"
 import { OpencodeClient } from "@opencode-ai/sdk/v2"
+import { SessionV1 } from "@opencode-ai/core/v1/session"
 import { runInteractiveMode } from "@/cli/cmd/run/runtime"
-import type { FooterApi, RunProvider } from "@/cli/cmd/run/types"
+import { formatUnknownError } from "@/cli/cmd/run/stream.transport"
+import type { FooterApi, RunPrompt, RunProvider, StreamCommit } from "@/cli/cmd/run/types"
 
 type SessionMessage = NonNullable<Awaited<ReturnType<OpencodeClient["session"]["messages"]>>["data"]>[number]
 
@@ -234,5 +236,99 @@ describe("run interactive runtime", () => {
     await task
 
     expect(transportProviders).toEqual([[provider]])
+  })
+
+  test("shows context overflow guidance and keeps accepting prompts", async () => {
+    const sdk = new OpencodeClient()
+    spyOn(sdk.config, "providers").mockImplementation(() => ok({ providers: [provider], default: {} }))
+    spyOn(sdk.session, "messages").mockImplementation(() => ok([]))
+    spyOn(sdk.session, "get").mockRejectedValue(new Error("not needed"))
+    spyOn(sdk.app, "agents").mockImplementation(() => ok([]))
+    spyOn(sdk.experimental.resource, "list").mockImplementation(() => ok({}))
+    spyOn(sdk.command, "list").mockImplementation(() => ok([]))
+
+    const ui = footer()
+    const prompts = new Set<(input: RunPrompt) => void>()
+    const commits: StreamCommit[] = []
+    ui.onPrompt = (fn) => {
+      prompts.add(fn)
+      return () => prompts.delete(fn)
+    }
+    ui.append = (commit) => {
+      commits.push(commit)
+    }
+    const submit = (text: string) => {
+      for (const fn of prompts) fn({ text, parts: [] })
+    }
+
+    const turns: string[] = []
+    const failed = defer<void>()
+    const recovered = defer<void>()
+
+    const task = runInteractiveMode(
+      {
+        sdk,
+        directory: "/tmp",
+        sessionID: "ses-1",
+        sessionTitle: "Session",
+        resume: true,
+        replay: false,
+        agent: "build",
+        model: {
+          providerID: "openai",
+          modelID: "gpt-5",
+        },
+        variant: undefined,
+        files: [],
+        thinking: true,
+        backgroundSubagents: false,
+      },
+      {
+        createRuntimeLifecycle: async () => ({
+          footer: ui,
+          onResize: () => () => {},
+          refreshTheme: () => {},
+          resetForReplay: () => Promise.resolve(),
+          close: () => Promise.resolve(),
+        }),
+        streamTransport: Promise.resolve({
+          createSessionTransport: async () => ({
+            runPromptTurn: async (input: { prompt: RunPrompt }) => {
+              turns.push(input.prompt.text)
+              if (turns.length === 1) {
+                setTimeout(() => failed.resolve(), 0)
+                throw new SessionV1.ContextOverflowError({
+                  message: "prompt is too long: 250000 tokens > 200000 maximum",
+                  responseBody: '{"error":{"type":"invalid_request_error"}}',
+                })
+              }
+              recovered.resolve()
+            },
+            selectSubagent: () => {},
+            replayOnResize: async () => false,
+            close: async () => {},
+          }),
+          formatUnknownError,
+        }),
+      },
+    )
+
+    while (prompts.size === 0) await Bun.sleep(1)
+    submit("first prompt")
+    await failed.promise
+    while (!commits.some((commit) => commit.kind === "error")) await Bun.sleep(1)
+
+    submit("second prompt")
+    await recovered.promise
+    ui.close()
+    await task
+
+    const errors = commits.filter((commit) => commit.kind === "error")
+    expect(errors.map((commit) => commit.text)).toEqual([
+      "Your prompt is too large for this model's context window. Try shortening the conversation or starting a new session, then send the prompt again.",
+    ])
+    expect(errors[0].text).not.toContain("invalid_request_error")
+    expect(errors[0].text).not.toContain("250000")
+    expect(turns).toEqual(["first prompt", "second prompt"])
   })
 })
