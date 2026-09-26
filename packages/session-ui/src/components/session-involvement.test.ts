@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test"
-import { toSessionInvolvementRows } from "./session-involvement"
+import { toSessionInvolvementMarkdown, toSessionInvolvementRows } from "./session-involvement"
 
 describe("session involvement", () => {
   test("returns an empty list for no diffs", () => {
@@ -133,5 +133,31 @@ describe("session involvement", () => {
     expect(rows).toEqual([
       { file: "untouched.ts", status: "modified", additions: 0, deletions: 0, lineRanges: [] },
     ])
+  })
+})
+
+describe("session involvement markdown", () => {
+  test("renders a valid document for an empty summary", () => {
+    expect(toSessionInvolvementMarkdown([])).toBe("# AI involvement summary\n\nNo changes in this session.\n")
+  })
+
+  test("lists each file with status, counts, and line ranges", () => {
+    const markdown = toSessionInvolvementMarkdown([
+      {
+        file: "a.ts",
+        status: "modified",
+        additions: 3,
+        deletions: 1,
+        lineRanges: [
+          { start: 4, end: 6 },
+          { start: 20, end: 20 },
+        ],
+      },
+      { file: "b.md", status: "added", additions: 2, deletions: 0, lineRanges: [] },
+    ])
+
+    expect(markdown).toBe(
+      "# AI involvement summary\n\n2 files changed\n\n- `a.ts` — modified (+3 -1): lines 4-6, 20\n- `b.md` — added (+2 -0)\n",
+    )
   })
 })
