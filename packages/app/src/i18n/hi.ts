@@ -629,6 +629,8 @@ export const dict = {
   "toast.session.export.success.description": "सेशन को {{filename}} में सहेजा गया",
   "toast.session.export.failed.title": "सेशन निर्यात करने में विफल",
   "toast.session.export.failed.description": "सेशन निर्यात करते समय एक त्रुटि हुई",
+  "toast.session.involvement.download.title": "Involvement summary downloaded",
+  "toast.session.involvement.download.description": "Saved summary to {{filename}}",
 
   "toast.session.listFailed.title": "{{project}} के लिए सेशन लोड करने में विफल",
   "toast.project.reloadFailed.title": "{{project}} को पुनः लोड करने में विफल",
@@ -712,6 +714,7 @@ export const dict = {
   "home.providerTip": "Claude, GPT, Gemini आदि सहित अन्य मॉडल का उपयोग करने के लिए 75+ प्रोवाइडर से कनेक्ट करें",
   "session.tab.session": "सेशन",
   "session.tab.review": "समीक्षा",
+  "session.involvement.download": "Download involvement summary",
   "session.tab.context": "कॉन्टेक्स्ट",
   "session.tab.unknown": "अज्ञात सेशन",
   "session.panel.reviewAndFiles": "समीक्षा और फ़ाइलें",
