@@ -353,8 +353,9 @@ exports[`opencode CLI help-text snapshots every documented command emits stable 
 manage sessions
 
 Commands:
-  opencode session list                list sessions
-  opencode session delete <sessionID>  delete a session
+  opencode session list                     list sessions
+  opencode session delete <sessionID>       delete a session
+  opencode session involvement <sessionID>  print files and line ranges modified in a session
 
 Options:
   -h, --help        show help                                                              [boolean]
