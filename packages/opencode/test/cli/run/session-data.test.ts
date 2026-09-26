@@ -117,6 +117,15 @@ describe("run session data", () => {
     )
   })
 
+  test("formats context overflow payloads without a data message", () => {
+    expect(formatError({ name: "ContextOverflowError", data: {} })).toBe(
+      "Your prompt is too large for this model's context window. Try shortening the conversation or starting a new session, then send the prompt again.",
+    )
+    expect(formatError({ name: "ContextOverflowError", message: "raw provider error" })).toBe(
+      "Your prompt is too large for this model's context window. Try shortening the conversation or starting a new session, then send the prompt again.",
+    )
+  })
+
   test("buffers delayed assistant text until the role is known", () => {
     let data = createSessionData()
     data = reduce(data, delta("msg-1", "txt-1", "hello")).data

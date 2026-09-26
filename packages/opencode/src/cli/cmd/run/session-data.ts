@@ -168,10 +168,10 @@ export function formatError(error: {
     message?: string
   }
 }): string {
-  if (error.data?.message) {
-    const contextOverflow = SessionErrorMessage.userFacingErrorMessage(error)
-    if (contextOverflow) return contextOverflow
+  const contextOverflow = SessionErrorMessage.userFacingErrorMessage(error)
+  if (contextOverflow) return contextOverflow
 
+  if (error.data?.message) {
     return error.data.message
   }
 
