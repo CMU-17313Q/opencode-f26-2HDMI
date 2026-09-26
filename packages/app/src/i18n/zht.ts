@@ -657,6 +657,8 @@ export const dict = {
   "toast.session.export.success.description": "已將工作階段儲存至 {{filename}}",
   "toast.session.export.failed.title": "匯出工作階段失敗",
   "toast.session.export.failed.description": "匯出工作階段時發生錯誤",
+  "toast.session.involvement.download.title": "Involvement summary downloaded",
+  "toast.session.involvement.download.description": "Saved summary to {{filename}}",
 
   "toast.session.listFailed.title": "無法載入 {{project}} 的工作階段",
 
@@ -737,6 +739,7 @@ export const dict = {
 
   "session.tab.session": "工作階段",
   "session.tab.review": "檢閱",
+  "session.involvement.download": "Download involvement summary",
   "session.tab.context": "上下文",
   "session.tab.unknown": "未知的工作階段",
   "session.panel.reviewAndFiles": "檢閱與檔案",
