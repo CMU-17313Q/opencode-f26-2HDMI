@@ -472,6 +472,11 @@ describe("run stream transport", () => {
     expect(formatted).not.toContain("private")
   })
 
+  test("keeps generic error messages", () => {
+    expect(formatUnknownError(new Error("Request failed"))).toBe("Request failed")
+    expect(formatUnknownError({ name: "APIError", message: "Bad gateway" })).toBe("Bad gateway")
+  })
+
   test("does not replay persisted main-session history during bootstrap by default", async () => {
     const src = eventFeed()
     const ui = footer()
