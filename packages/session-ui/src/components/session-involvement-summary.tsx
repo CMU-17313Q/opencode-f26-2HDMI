@@ -1,7 +1,12 @@
 import { createMemo, For, Show } from "solid-js"
 import { useI18n } from "@opencode-ai/ui/context/i18n"
 import { DiffChanges } from "@opencode-ai/ui/diff-changes"
-import { toSessionInvolvementRows, type SessionInvolvementDiff } from "./session-involvement"
+import { IconButton } from "@opencode-ai/ui/icon-button"
+import {
+  toSessionInvolvementMarkdown,
+  toSessionInvolvementRows,
+  type SessionInvolvementDiff,
+} from "./session-involvement"
 
 const statusKey = {
   added: "ui.sessionReview.change.added",
@@ -9,7 +14,12 @@ const statusKey = {
   modified: "ui.sessionReview.change.modified",
 } as const
 
-export function SessionInvolvementSummary(props: { diffs: SessionInvolvementDiff[]; class?: string }) {
+export function SessionInvolvementSummary(props: {
+  diffs: SessionInvolvementDiff[]
+  class?: string
+  downloadLabel?: string
+  onDownload?: (markdown: string) => void
+}) {
   const i18n = useI18n()
   const rows = createMemo(() => toSessionInvolvementRows(props.diffs))
 
@@ -21,12 +31,27 @@ export function SessionInvolvementSummary(props: { diffs: SessionInvolvementDiff
     >
       <div class="flex items-center justify-between gap-3">
         <h2 class="text-12-medium text-text-strong">{i18n.t("ui.sessionReview.title")}</h2>
-        <Show when={rows().length > 0}>
-          <div data-slot="session-involvement-totals" class="flex items-center gap-2 text-12-regular text-text-weak">
-            <span>{i18n.plural("ui.sessionTurn.diffs.changed", rows().length)}</span>
-            <DiffChanges changes={rows()} />
-          </div>
-        </Show>
+        <div class="flex items-center gap-2">
+          <Show when={rows().length > 0}>
+            <div data-slot="session-involvement-totals" class="flex items-center gap-2 text-12-regular text-text-weak">
+              <span>{i18n.plural("ui.sessionTurn.diffs.changed", rows().length)}</span>
+              <DiffChanges changes={rows()} />
+            </div>
+          </Show>
+          <Show when={props.onDownload}>
+            {(onDownload) => (
+              <IconButton
+                data-slot="session-involvement-download"
+                icon="download"
+                size="normal"
+                variant="ghost"
+                aria-label={props.downloadLabel}
+                title={props.downloadLabel}
+                onClick={() => onDownload()(toSessionInvolvementMarkdown(rows()))}
+              />
+            )}
+          </Show>
+        </div>
       </div>
       <Show
         when={rows().length > 0}
