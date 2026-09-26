@@ -3,6 +3,8 @@ import { Effect } from "effect"
 import { cmd } from "./cmd"
 import { effectCmd, fail } from "../effect-cmd"
 import { Session } from "@/session/session"
+import { SessionInvolvement } from "@/session/involvement"
+import { SessionSummary } from "@/session/summary"
 import { SessionID } from "../../session/schema"
 import { UI } from "../ui"
 import { Locale } from "@/util/locale"
@@ -60,9 +62,17 @@ export const SessionInvolvementCommand = effectCmd({
     }),
   handler: Effect.fn("Cli.session.involvement")(function* (args) {
     const svc = yield* Session.Service
+    const summary = yield* SessionSummary.Service
     const sessionID = SessionID.make(args.sessionID)
-    yield* svc.get(sessionID).pipe(Effect.catchIf(NotFoundError.isInstance, () => fail(`Session not found: ${args.sessionID}`)))
-    console.log("ok")
+    const notFound = () => fail(`Session not found: ${args.sessionID}`)
+    yield* svc.get(sessionID).pipe(Effect.catchIf(NotFoundError.isInstance, notFound))
+    const messages = yield* svc.messages({ sessionID }).pipe(Effect.catchIf(NotFoundError.isInstance, notFound))
+    const lists = yield* Effect.forEach(
+      messages.filter((msg) => msg.info.role === "user").map((msg) => msg.info.id),
+      (messageID) => summary.diff({ sessionID, messageID }),
+    )
+    const diffs = [...new Map(lists.flat().map((diff) => [diff.file ?? "", diff])).values()]
+    console.log(SessionInvolvement.formatReport(sessionID, SessionInvolvement.fromDiffs(diffs)))
   }),
 })
 
