@@ -48,8 +48,21 @@ export function sessionExportFilename(session: { id: string; title?: string; slu
 }
 
 export function downloadSessionExport(filename: string, data: unknown) {
-  const json = JSON.stringify(data, null, 2)
-  const blob = new Blob([json], { type: "application/json" })
+  downloadFile(filename, JSON.stringify(data, null, 2), "application/json")
+}
+
+export function involvementFilename(sessionID: string) {
+  return `involvement-${sessionID}.md`
+}
+
+export function downloadInvolvementMarkdown(sessionID: string, markdown: string) {
+  const filename = involvementFilename(sessionID)
+  downloadFile(filename, markdown, "text/markdown")
+  return filename
+}
+
+function downloadFile(filename: string, content: string, type: string) {
+  const blob = new Blob([content], { type })
   const url = URL.createObjectURL(blob)
   const a = document.createElement("a")
   a.href = url
