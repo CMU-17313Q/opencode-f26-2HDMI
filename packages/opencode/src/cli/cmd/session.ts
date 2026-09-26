@@ -44,8 +44,23 @@ function pagerCmd(): string[] {
 export const SessionCommand = cmd({
   command: "session",
   describe: "manage sessions",
-  builder: (yargs: Argv) => yargs.command(SessionListCommand).command(SessionDeleteCommand).demandCommand(),
+  builder: (yargs: Argv) =>
+    yargs.command(SessionListCommand).command(SessionDeleteCommand).command(SessionInvolvementCommand).demandCommand(),
   async handler() {},
+})
+
+export const SessionInvolvementCommand = effectCmd({
+  command: "involvement <sessionID>",
+  describe: "print files and line ranges modified in a session",
+  builder: (yargs) =>
+    yargs.positional("sessionID", {
+      describe: "session ID to report",
+      type: "string",
+      demandOption: true,
+    }),
+  handler: Effect.fn("Cli.session.involvement")(function* (_args) {
+    console.log("ok")
+  }),
 })
 
 export const SessionDeleteCommand = effectCmd({
