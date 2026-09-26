@@ -453,7 +453,9 @@ function sdk(
 
 describe("run stream transport", () => {
   test("formats context overflow with actionable guidance", () => {
-    expect(formatUnknownError({ name: "ContextOverflowError", data: { message: "raw", responseBody: "private" } })).toBe(
+    expect(
+      formatUnknownError({ name: "ContextOverflowError", data: { message: "raw", responseBody: "private" } }),
+    ).toBe(
       "Your prompt is too large for this model's context window. Try shortening the conversation or starting a new session, then send the prompt again.",
     )
   })
