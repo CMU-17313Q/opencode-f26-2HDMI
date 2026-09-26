@@ -25,6 +25,7 @@
 //   event arrives, the queue entry is removed and the footer falls back
 //   to the next pending request or to the prompt view.
 import type { Event, Part, PermissionRequest, QuestionRequest, ToolPart } from "@opencode-ai/sdk/v2"
+import { SessionErrorMessage } from "@opencode-ai/core/session/error-message"
 import * as Locale from "@/util/locale"
 import { toolView } from "./tool"
 import type { FooterOutput, FooterPatch, FooterView, StreamCommit } from "./types"
@@ -167,6 +168,9 @@ export function formatError(error: {
     message?: string
   }
 }): string {
+  const contextOverflow = SessionErrorMessage.userFacingErrorMessage(error)
+  if (contextOverflow) return contextOverflow
+
   if (error.data?.message) {
     return error.data.message
   }

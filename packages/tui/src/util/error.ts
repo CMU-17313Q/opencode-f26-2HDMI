@@ -1,4 +1,5 @@
 import { isRecord } from "./record"
+import { SessionErrorMessage } from "@opencode-ai/core/session/error-message"
 
 type ConfigIssue = { message: string; path: string[] }
 
@@ -123,6 +124,9 @@ export function errorFormat(error: unknown): string {
 }
 
 export function errorMessage(error: unknown): string {
+  const contextOverflow = SessionErrorMessage.userFacingErrorMessage(error)
+  if (contextOverflow) return contextOverflow
+
   if (error instanceof Error) {
     if (error.message) return error.message
     if (error.name) return error.name
