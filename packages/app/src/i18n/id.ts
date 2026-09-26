@@ -675,6 +675,8 @@ export const dict = {
   "toast.session.export.success.description": "Sesi disimpan ke {{filename}}",
   "toast.session.export.failed.title": "Gagal mengekspor sesi",
   "toast.session.export.failed.description": "Terjadi kesalahan saat mengekspor sesi",
+  "toast.session.involvement.download.title": "Involvement summary downloaded",
+  "toast.session.involvement.download.description": "Saved summary to {{filename}}",
 
   "toast.session.listFailed.title": "Gagal memuat sesi untuk {{project}}",
   "toast.project.reloadFailed.title": "Gagal memuat ulang {{project}}",
@@ -767,6 +769,7 @@ export const dict = {
 
   "session.tab.session": "Sesi",
   "session.tab.review": "Tinjauan",
+  "session.involvement.download": "Download involvement summary",
   "session.tab.context": "Konteks",
   "session.tab.unknown": "Sesi Tidak Dikenal",
   "session.panel.reviewAndFiles": "Tinjauan dan berkas",

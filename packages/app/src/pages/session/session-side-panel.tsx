@@ -27,6 +27,7 @@ import type { SnapshotFileDiff, VcsFileDiff } from "@opencode-ai/sdk/v2"
 import type { FileDiffInfo } from "@opencode-ai/client/promise"
 import { ConstrainDragYAxis, getDraggableId } from "@/utils/solid-dnd"
 import { useDialog } from "@opencode-ai/ui/context/dialog"
+import { SessionInvolvementSummary } from "@opencode-ai/session-ui/session-involvement-summary"
 
 import FileTree from "@/components/file-tree"
 import { normalizeFileTreeV2Path } from "@/components/file-tree-v2-model"
@@ -55,6 +56,8 @@ import {
 } from "@/pages/session/helpers"
 import { setSessionHandoff } from "@/pages/session/handoff"
 import { useSessionLayout } from "@/pages/session/session-layout"
+import { downloadInvolvementMarkdown } from "@/utils/session-export"
+import { showToast } from "@/utils/toast"
 import { SessionFileBrowserTab, type SessionFileBrowserState } from "@/pages/session/v2/session-file-browser-tab"
 
 type ReviewDiff = FileDiffInfo | SnapshotFileDiff | VcsFileDiff
@@ -90,6 +93,17 @@ export function SessionSidePanel(props: {
   const dialog = useDialog()
   const sdk = useSDK()
   const { sessionKey, tabs, view, params } = useSessionLayout()
+
+  const downloadInvolvement = (markdown: string) => {
+    if (!params.id) return
+    const filename = downloadInvolvementMarkdown(params.id, markdown)
+    showToast({
+      variant: "success",
+      icon: "circle-check",
+      title: language.t("toast.session.involvement.download.title"),
+      description: language.t("toast.session.involvement.download.description", { filename }),
+    })
+  }
   const projectDirectory = createMemo(() => sdk().directory)
 
   const isDesktop = createMediaQuery("(min-width: 768px)")
@@ -473,6 +487,13 @@ export function SessionSidePanel(props: {
                               data-slot="tabs-content"
                               class="flex flex-col h-full overflow-hidden contain-strict"
                             >
+                              <Show when={props.diffsReady()}>
+                                <SessionInvolvementSummary
+                                  diffs={diffs()}
+                                  downloadLabel={language.t("session.involvement.download")}
+                                  onDownload={downloadInvolvement}
+                                />
+                              </Show>
                               {props.reviewPanel()}
                             </div>
                           </Show>
@@ -701,6 +722,13 @@ export function SessionSidePanel(props: {
                             data-slot="tabs-content"
                             class="flex flex-col h-full overflow-hidden contain-strict"
                           >
+                            <Show when={props.diffsReady()}>
+                              <SessionInvolvementSummary
+                                diffs={diffs()}
+                                downloadLabel={language.t("session.involvement.download")}
+                                onDownload={downloadInvolvement}
+                              />
+                            </Show>
                             {props.reviewPanel()}
                           </div>
                         </Show>
