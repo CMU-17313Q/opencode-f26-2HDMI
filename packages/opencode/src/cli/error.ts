@@ -1,4 +1,5 @@
 import { NamedError } from "@opencode-ai/core/util/error"
+import { SessionErrorMessage } from "@opencode-ai/core/session/error-message"
 import { errorFormat } from "@/util/error"
 import { isRecord } from "@/util/record"
 
@@ -37,6 +38,9 @@ export function FormatError(input: unknown): string | undefined {
     const formatted = FormatError(input.cause.body)
     if (formatted) return formatted
   }
+
+  const contextOverflow = SessionErrorMessage.userFacingErrorMessage(input)
+  if (contextOverflow) return contextOverflow
 
   // CliError: domain failure surfaced from an effectCmd handler via fail("...")
   if (isTaggedError(input, "CliError")) {

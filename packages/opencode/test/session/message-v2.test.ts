@@ -1443,6 +1443,51 @@ describe("session.message-v2.fromError", () => {
     })
   })
 
+  test("detects context overflow from message-only stream errors", () => {
+    const body = {
+      type: "error",
+      error: {
+        message: "Your input exceeds the context window of this model",
+      },
+    }
+
+    const result = MessageV2.fromError({ message: JSON.stringify(body) }, { providerID })
+    expect(SessionV1.ContextOverflowError.isInstance(result)).toBe(true)
+
+    const topLevelBody = {
+      type: "error",
+      message: "The request contains too many tokens",
+    }
+    const topLevelResult = MessageV2.fromError({ message: JSON.stringify(topLevelBody) }, { providerID })
+    expect(SessionV1.ContextOverflowError.isInstance(topLevelResult)).toBe(true)
+  })
+
+  test("does not classify server errors as context overflow", () => {
+    const body = {
+      type: "error",
+      error: {
+        code: "server_error",
+        message: "Too many requests, please try again later",
+      },
+    }
+    const result = MessageV2.fromError({ message: JSON.stringify(body) }, { providerID })
+    expect(SessionV1.ContextOverflowError.isInstance(result)).toBe(false)
+    expect(SessionV1.APIError.isInstance(result)).toBe(true)
+  })
+
+  test("does not classify quota errors as context overflow", () => {
+    const body = {
+      type: "error",
+      error: {
+        code: "insufficient_quota",
+        message: "Quota exceeded",
+      },
+    }
+    const result = MessageV2.fromError({ message: JSON.stringify(body) }, { providerID })
+    expect(SessionV1.ContextOverflowError.isInstance(result)).toBe(false)
+    expect(SessionV1.APIError.isInstance(result)).toBe(true)
+  })
+
   test("detects context overflow from APICallError provider messages", () => {
     const cases = [
       "prompt is too long: 213462 tokens > 200000 maximum",
