@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, mock, spyOn, test } from "bun:test"
 import { OpencodeClient, type GlobalEvent } from "@opencode-ai/sdk/v2"
+import { SessionV1 } from "@opencode-ai/core/v1/session"
 import { createSessionTransport, formatUnknownError } from "@/cli/cmd/run/stream.transport"
 import type { FooterApi, FooterEvent, LocalReplayRow, RunFilePart, StreamCommit } from "@/cli/cmd/run/types"
 
@@ -458,6 +459,17 @@ describe("run stream transport", () => {
     ).toBe(
       "Your prompt is too large for this model's context window. Try shortening the conversation or starting a new session, then send the prompt again.",
     )
+  })
+
+  test("formats context overflow error instances without provider details", () => {
+    const formatted = formatUnknownError(
+      new SessionV1.ContextOverflowError({ message: "raw provider error", responseBody: '{"error":"private"}' }),
+    )
+
+    expect(formatted).toBe(
+      "Your prompt is too large for this model's context window. Try shortening the conversation or starting a new session, then send the prompt again.",
+    )
+    expect(formatted).not.toContain("private")
   })
 
   test("does not replay persisted main-session history during bootstrap by default", async () => {
