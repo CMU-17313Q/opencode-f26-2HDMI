@@ -58,7 +58,10 @@ export const SessionInvolvementCommand = effectCmd({
       type: "string",
       demandOption: true,
     }),
-  handler: Effect.fn("Cli.session.involvement")(function* (_args) {
+  handler: Effect.fn("Cli.session.involvement")(function* (args) {
+    const svc = yield* Session.Service
+    const sessionID = SessionID.make(args.sessionID)
+    yield* svc.get(sessionID).pipe(Effect.catchIf(NotFoundError.isInstance, () => fail(`Session not found: ${args.sessionID}`)))
     console.log("ok")
   }),
 })
