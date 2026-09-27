@@ -577,6 +577,11 @@ export const dict = {
   "toast.session.export.failed.title": "Failed to export session",
   "toast.session.export.failed.description": "An error occurred while exporting the session",
 
+  "toast.session.involvement.copy.success.title": "Involvement summary copied",
+  "toast.session.involvement.copy.success.description": "Markdown report copied to clipboard",
+  "toast.session.involvement.copy.failed.title": "Failed to copy involvement summary",
+  "toast.session.involvement.copy.failed.description": "An error occurred while copying the involvement summary",
+
   "toast.session.listFailed.title": "Failed to load sessions for {{project}}",
   "toast.project.reloadFailed.title": "Failed to reload {{project}}",
 
@@ -783,6 +788,7 @@ export const dict = {
   "session.share.action.unpublishing": "Unpublishing...",
   "session.share.action.view": "View",
   "session.share.copy.copied": "Copied",
+  "session.involvement.copy": "Copy",
   "session.share.copy.copyLink": "Copy link",
 
   "lsp.tooltip.none": "No LSP servers",
