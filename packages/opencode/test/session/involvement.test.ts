@@ -77,3 +77,28 @@ describe("session involvement", () => {
     ])
   })
 })
+
+describe("session involvement report", () => {
+  test("formats several files with totals and line ranges", () => {
+    const text = SessionInvolvement.formatReport("ses_xxx", [
+      { file: "packages/app/src/foo.ts", status: "modified", additions: 42, deletions: 10, ranges: [{ start: 12, end: 40 }, { start: 88, end: 95 }] },
+      { file: "packages/app/src/bar.ts", status: "added", additions: 0, deletions: 8, ranges: [{ start: 1, end: 60 }] },
+      { file: "README.md", status: "deleted", additions: 0, deletions: 0, ranges: [] },
+    ])
+
+    expect(text).toBe(
+      [
+        "AI involvement — session ses_xxx",
+        "3 files, +42 / -18",
+        "",
+        "- packages/app/src/foo.ts (modified)  lines 12–40, 88–95",
+        "- packages/app/src/bar.ts (added)  lines 1–60",
+        "- README.md (deleted)",
+      ].join("\n"),
+    )
+  })
+
+  test("formats an empty session without crashing", () => {
+    expect(SessionInvolvement.formatReport("ses_empty", [])).toBe("AI involvement — session ses_empty\n0 files, +0 / -0")
+  })
+})

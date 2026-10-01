@@ -18,6 +18,20 @@ export function fromDiffs(diffs: FileDiff.Info[]): Row[] {
   return diffs.map(toRow)
 }
 
+export function formatReport(sessionID: string, rows: Row[]): string {
+  const additions = rows.reduce((sum, row) => sum + row.additions, 0)
+  const deletions = rows.reduce((sum, row) => sum + row.deletions, 0)
+  const header = [`AI involvement — session ${sessionID}`, `${rows.length} files, +${additions} / -${deletions}`]
+  if (rows.length === 0) return header.join("\n")
+  return [...header, "", ...rows.map(formatRow)].join("\n")
+}
+
+function formatRow(row: Row): string {
+  if (row.ranges.length === 0) return `- ${row.file} (${row.status})`
+  const ranges = row.ranges.map((range) => `${range.start}–${range.end}`).join(", ")
+  return `- ${row.file} (${row.status})  lines ${ranges}`
+}
+
 function toRow(diff: FileDiff.Info): Row {
   return {
     file: diff.file ?? "",
