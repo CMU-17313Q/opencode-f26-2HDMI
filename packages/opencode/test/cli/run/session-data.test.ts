@@ -1,6 +1,7 @@
 import { describe, expect, test } from "bun:test"
 import type { Event } from "@opencode-ai/sdk/v2"
-import { createSessionData, flushInterrupted, reduceSessionData } from "@/cli/cmd/run/session-data"
+import { SessionV1 } from "@opencode-ai/core/v1/session"
+import { createSessionData, flushInterrupted, formatError, reduceSessionData } from "@/cli/cmd/run/session-data"
 import type { StreamCommit } from "@/cli/cmd/run/types"
 
 function reduce(data: ReturnType<typeof createSessionData>, event: unknown, thinking = true) {
@@ -111,6 +112,31 @@ function tool(input: { id: string; messageID: string; tool: string; state: Recor
 }
 
 describe("run session data", () => {
+  test("formats context overflow with actionable guidance", () => {
+    expect(formatError({ name: "ContextOverflowError", data: { message: "raw provider error" } })).toBe(
+      "Your prompt is too large for this model's context window. Try shortening the conversation or starting a new session, then send the prompt again.",
+    )
+  })
+
+  test("formats context overflow payloads without a data message", () => {
+    expect(formatError({ name: "ContextOverflowError", data: {} })).toBe(
+      "Your prompt is too large for this model's context window. Try shortening the conversation or starting a new session, then send the prompt again.",
+    )
+    expect(formatError({ name: "ContextOverflowError", message: "raw provider error" })).toBe(
+      "Your prompt is too large for this model's context window. Try shortening the conversation or starting a new session, then send the prompt again.",
+    )
+  })
+
+  test("formats context overflow error instances", () => {
+    expect(formatError(new SessionV1.ContextOverflowError({ message: "raw provider error" }))).toBe(
+      "Your prompt is too large for this model's context window. Try shortening the conversation or starting a new session, then send the prompt again.",
+    )
+  })
+
+  test("keeps generic API error messages", () => {
+    expect(formatError({ name: "APIError", data: { message: "Request failed" } })).toBe("Request failed")
+  })
+
   test("buffers delayed assistant text until the role is known", () => {
     let data = createSessionData()
     data = reduce(data, delta("msg-1", "txt-1", "hello")).data

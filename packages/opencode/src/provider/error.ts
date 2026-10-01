@@ -107,13 +107,21 @@ export function parseStreamError(input: unknown): ParsedStreamError | undefined 
   const responseBody = JSON.stringify(body)
   if (body.type !== "error") return
 
+  const streamMessage =
+    typeof body?.error?.message === "string"
+      ? body.error.message
+      : typeof body?.message === "string"
+        ? body.message
+        : undefined
+  if (body?.error?.code === "context_length_exceeded" || (streamMessage && isContextOverflow(streamMessage))) {
+    return {
+      type: "context_overflow",
+      message: "Input exceeds context window of this model",
+      responseBody,
+    }
+  }
+
   switch (body?.error?.code) {
-    case "context_length_exceeded":
-      return {
-        type: "context_overflow",
-        message: "Input exceeds context window of this model",
-        responseBody,
-      }
     case "insufficient_quota":
       return {
         type: "api_error",
