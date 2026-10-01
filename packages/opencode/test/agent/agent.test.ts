@@ -50,6 +50,7 @@ it.instance("returns default native agents when no config", () =>
     const names = agents.map((a) => a.name)
     expect(names).toContain("build")
     expect(names).toContain("plan")
+    expect(names).toContain("learn")
     expect(names).toContain("general")
     expect(names).toContain("explore")
     expect(names).toContain("compaction")
@@ -749,6 +750,7 @@ it.instance(
       agent: {
         build: { disable: true },
         plan: { disable: true },
+        learn: { disable: true },
       },
     },
   },
