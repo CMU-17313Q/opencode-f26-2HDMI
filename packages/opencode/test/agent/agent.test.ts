@@ -70,6 +70,17 @@ it.instance("build agent has correct default properties", () =>
   }),
 )
 
+it.instance("learn agent is a native primary tutor", () =>
+  Effect.gen(function* () {
+    const learn = yield* load((svc) => svc.get("learn"))
+    expect(learn).toBeDefined()
+    expect(learn?.mode).toBe("primary")
+    expect(learn?.native).toBe(true)
+    expect(learn?.prompt).toContain("Socratic coding tutor")
+    expect(yield* load((svc) => svc.defaultAgent())).toBe("build")
+  }),
+)
+
 it.instance("plan agent denies edits except .opencode/plans/*", () =>
   Effect.gen(function* () {
     const plan = yield* load((svc) => svc.get("plan"))
