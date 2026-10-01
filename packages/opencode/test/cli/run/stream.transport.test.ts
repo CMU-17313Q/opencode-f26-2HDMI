@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, mock, spyOn, test } from "bun:test"
 import { OpencodeClient, type GlobalEvent } from "@opencode-ai/sdk/v2"
-import { createSessionTransport } from "@/cli/cmd/run/stream.transport"
+import { createSessionTransport, formatUnknownError } from "@/cli/cmd/run/stream.transport"
 import type { FooterApi, FooterEvent, LocalReplayRow, RunFilePart, StreamCommit } from "@/cli/cmd/run/types"
 
 type EventStream = Awaited<ReturnType<OpencodeClient["event"]["subscribe"]>>["stream"]
@@ -452,6 +452,12 @@ function sdk(
 }
 
 describe("run stream transport", () => {
+  test("formats context overflow with actionable guidance", () => {
+    expect(formatUnknownError({ name: "ContextOverflowError", data: { message: "raw", responseBody: "private" } })).toBe(
+      "Your prompt is too large for this model's context window. Try shortening the conversation or starting a new session, then send the prompt again.",
+    )
+  })
+
   test("does not replay persisted main-session history during bootstrap by default", async () => {
     const src = eventFeed()
     const ui = footer()

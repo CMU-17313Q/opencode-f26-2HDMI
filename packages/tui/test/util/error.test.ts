@@ -22,6 +22,12 @@ describe("util.error", () => {
     expect(data.code).toBe("E_BAD")
   })
 
+  test("formats context overflow without provider details", () => {
+    expect(errorMessage({ name: "ContextOverflowError", data: { message: "raw", responseBody: "private" } })).toBe(
+      "Your prompt is too large for this model's context window. Try shortening the conversation or starting a new session, then send the prompt again.",
+    )
+  })
+
   test("never returns bare {} for opaque object errors", () => {
     expect(errorFormat({})).not.toBe("{}")
     expect(errorFormat({})).toContain("no message")

@@ -4,6 +4,12 @@ import { FormatError } from "../../src/cli/error"
 import { UI } from "../../src/cli/ui"
 
 describe("cli.error", () => {
+  test("formats context overflow with actionable guidance", () => {
+    expect(FormatError({ name: "ContextOverflowError", data: { message: "raw", responseBody: "private" } })).toBe(
+      "Your prompt is too large for this model's context window. Try shortening the conversation or starting a new session, then send the prompt again.",
+    )
+  })
+
   test("formats legacy and tagged config errors the same way", () => {
     const cases = [
       {
