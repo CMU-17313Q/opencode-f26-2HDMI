@@ -512,6 +512,8 @@ export const dict = {
   "toast.session.export.success.description": "Sitzung unter {{filename}} gespeichert",
   "toast.session.export.failed.title": "Sitzung konnte nicht exportiert werden",
   "toast.session.export.failed.description": "Beim Exportieren der Sitzung ist ein Fehler aufgetreten",
+  "toast.session.involvement.download.title": "Involvement summary downloaded",
+  "toast.session.involvement.download.description": "Saved summary to {{filename}}",
 
   "toast.session.listFailed.title": "Sitzungen für {{project}} konnten nicht geladen werden",
   "toast.update.title": "Update verfügbar",
@@ -588,6 +590,7 @@ export const dict = {
     "OpenCode mit über 75 Anbietern verbinden, um weitere Modelle wie Claude, GPT, Gemini und andere zu nutzen",
   "session.tab.session": "Sitzung",
   "session.tab.review": "Überprüfung",
+  "session.involvement.download": "Download involvement summary",
   "session.tab.context": "Kontext",
   "session.tab.unknown": "Unbekannte Sitzung",
   "session.panel.reviewAndFiles": "Überprüfung und Dateien",

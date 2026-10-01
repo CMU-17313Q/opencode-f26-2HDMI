@@ -661,6 +661,8 @@ export const dict = {
   "toast.session.export.success.description": "บันทึกเซสชันไปยัง {{filename}} แล้ว",
   "toast.session.export.failed.title": "ไม่สามารถส่งออกเซสชัน",
   "toast.session.export.failed.description": "เกิดข้อผิดพลาดขณะส่งออกเซสชัน",
+  "toast.session.involvement.download.title": "Involvement summary downloaded",
+  "toast.session.involvement.download.description": "Saved summary to {{filename}}",
 
   "toast.session.listFailed.title": "ไม่สามารถโหลดเซสชันสำหรับ {{project}}",
 
@@ -741,6 +743,7 @@ export const dict = {
 
   "session.tab.session": "เซสชัน",
   "session.tab.review": "ตรวจสอบ",
+  "session.involvement.download": "Download involvement summary",
   "session.tab.context": "บริบท",
   "session.tab.unknown": "เซสชันที่ไม่รู้จัก",
   "session.panel.reviewAndFiles": "ตรวจสอบและไฟล์",

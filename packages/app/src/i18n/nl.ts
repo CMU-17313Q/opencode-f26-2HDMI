@@ -627,6 +627,8 @@ export const dict = {
   "toast.session.export.success.description": "Sessie opgeslagen in {{filename}}",
   "toast.session.export.failed.title": "Kan sessie niet exporteren",
   "toast.session.export.failed.description": "Er is een fout opgetreden tijdens het exporteren van de sessie",
+  "toast.session.involvement.download.title": "Involvement summary downloaded",
+  "toast.session.involvement.download.description": "Saved summary to {{filename}}",
 
   "toast.session.listFailed.title": "Kan sessies voor {{project}} niet laden",
   "toast.project.reloadFailed.title": "Kan {{project}} niet opnieuw laden",
@@ -710,6 +712,7 @@ export const dict = {
     "Maak verbinding met meer dan 75 providers om andere modellen te gebruiken, waaronder Claude, GPT, Gemini, enz.",
   "session.tab.session": "Sessie",
   "session.tab.review": "Beoordeling",
+  "session.involvement.download": "Download involvement summary",
   "session.tab.context": "Context",
   "session.tab.unknown": "Onbekende sessie",
   "session.panel.reviewAndFiles": "Beoordeling en bestanden",

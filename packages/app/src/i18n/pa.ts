@@ -630,6 +630,8 @@ export const dict = {
   "toast.session.export.success.description": "سیشن نوں \u2068{{filename}}\u2069 وچ محفوظ کر دتا گیا",
   "toast.session.export.failed.title": "سیشن برآمد کرن چ ناکامی ہوئی",
   "toast.session.export.failed.description": "سیشن برآمد کردے ویلے اک غلطی ہو گئی",
+  "toast.session.involvement.download.title": "Involvement summary downloaded",
+  "toast.session.involvement.download.description": "Saved summary to {{filename}}",
 
   "toast.session.listFailed.title": "{{project}} لئی سیشن لوڈ کرن چ ناکام رہیا",
   "toast.project.reloadFailed.title": "{{project}} دوبارہ لوڈ نئیں ہو سکیا",
@@ -712,6 +714,7 @@ export const dict = {
     "دوجے ماڈل استعمال کرن لئی 75+ فراہم کرن آلیاں نال جڑو، جنہاں چ Claude، GPT، Gemini، وغیرہ شامل نیں",
   "session.tab.session": "سیشن",
   "session.tab.review": "جائزہ",
+  "session.involvement.download": "Download involvement summary",
   "session.tab.context": "تناظر",
   "session.tab.unknown": "نامعلوم سیشن",
   "session.panel.reviewAndFiles": "جائزہ تے فائلاں",

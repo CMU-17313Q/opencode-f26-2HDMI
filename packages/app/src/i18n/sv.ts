@@ -625,6 +625,8 @@ export const dict = {
   "toast.session.export.success.description": "Sessionen sparades i {{filename}}",
   "toast.session.export.failed.title": "Det gick inte att exportera sessionen",
   "toast.session.export.failed.description": "Ett fel uppstod när sessionen exporterades",
+  "toast.session.involvement.download.title": "Involvement summary downloaded",
+  "toast.session.involvement.download.description": "Saved summary to {{filename}}",
 
   "toast.session.listFailed.title": "Det gick inte att läsa in sessioner för {{project}}",
   "toast.project.reloadFailed.title": "Det gick inte att ladda om {{project}}",
@@ -707,6 +709,7 @@ export const dict = {
   "home.providerTip": "Anslut till 75+ leverantörer för att använda andra modeller, inklusive Claude, GPT, Gemini, etc",
   "session.tab.session": "Session",
   "session.tab.review": "Granskning",
+  "session.involvement.download": "Download involvement summary",
   "session.tab.context": "Kontext",
   "session.tab.unknown": "Okänd session",
   "session.panel.reviewAndFiles": "Granskning och filer",

@@ -630,6 +630,8 @@ export const dict = {
   "toast.session.export.success.description": "Đã lưu phiên vào {{filename}}",
   "toast.session.export.failed.title": "Không thể xuất phiên",
   "toast.session.export.failed.description": "Đã xảy ra lỗi khi xuất phiên",
+  "toast.session.involvement.download.title": "Involvement summary downloaded",
+  "toast.session.involvement.download.description": "Saved summary to {{filename}}",
 
   "toast.session.listFailed.title": "Không thể tải phiên cho {{project}}",
   "toast.project.reloadFailed.title": "Không thể tải lại {{project}}",
@@ -712,6 +714,7 @@ export const dict = {
   "home.providerTip": "Kết nối với hơn 75 nhà cung cấp để sử dụng các mô hình khác, bao gồm Claude, GPT, Gemini, v.v.",
   "session.tab.session": "Phiên",
   "session.tab.review": "Xem lại",
+  "session.involvement.download": "Download involvement summary",
   "session.tab.context": "Ngữ cảnh",
   "session.tab.unknown": "Phiên không xác định",
   "session.panel.reviewAndFiles": "Xem lại và tệp",

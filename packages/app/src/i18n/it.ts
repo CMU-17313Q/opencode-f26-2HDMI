@@ -535,6 +535,8 @@ export const dict = {
   "toast.session.export.success.description": "Sessione salvata in {{filename}}",
   "toast.session.export.failed.title": "Impossibile esportare la sessione",
   "toast.session.export.failed.description": "Si è verificato un errore durante l’esportazione della sessione",
+  "toast.session.involvement.download.title": "Involvement summary downloaded",
+  "toast.session.involvement.download.description": "Saved summary to {{filename}}",
 
   "toast.session.listFailed.title": "Impossibile caricare le sessioni per {{project}}",
   "toast.project.reloadFailed.title": "Impossibile ricaricare {{project}}",
@@ -618,6 +620,7 @@ export const dict = {
   "home.providerTip": "Connettiti a oltre 75 provider per utilizzare altri modelli, inclusi Claude, GPT, Gemini, ecc.",
   "session.tab.session": "Sessione",
   "session.tab.review": "Revisione",
+  "session.involvement.download": "Download involvement summary",
   "session.tab.context": "Contesto",
   "session.tab.unknown": "Sessione sconosciuta",
   "session.panel.reviewAndFiles": "Revisione e file",

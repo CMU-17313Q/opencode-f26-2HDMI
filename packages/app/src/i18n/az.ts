@@ -627,6 +627,8 @@ export const dict = {
   "toast.session.export.success.description": "Sessiya {{filename}} faylına saxlanıldı",
   "toast.session.export.failed.title": "Sessiya ixrac edilə bilmədi",
   "toast.session.export.failed.description": "Sessiyanı ixrac edərkən xəta baş verdi",
+  "toast.session.involvement.download.title": "Involvement summary downloaded",
+  "toast.session.involvement.download.description": "Saved summary to {{filename}}",
 
   "toast.session.listFailed.title": "{{project}} üçün sessiyalar yüklənə bilmədi",
   "toast.project.reloadFailed.title": "{{project}} yenidən yüklənə bilmədi",
@@ -712,6 +714,7 @@ export const dict = {
     "Claude, GPT, Gemini və s. daxil olmaqla, digər modellərdən istifadə etmək üçün 75+ provayderə qoşulun",
   "session.tab.session": "Sessiya",
   "session.tab.review": "İcmal",
+  "session.involvement.download": "Download involvement summary",
   "session.tab.context": "Kontekst",
   "session.tab.unknown": "Naməlum sessiya",
   "session.panel.reviewAndFiles": "İcmal və fayllar",

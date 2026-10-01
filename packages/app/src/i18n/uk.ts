@@ -679,6 +679,8 @@ export const dict = {
   "toast.session.export.success.description": "Сесію збережено у файл {{filename}}",
   "toast.session.export.failed.title": "Не вдалося експортувати сесію",
   "toast.session.export.failed.description": "Під час експортування сесії сталася помилка",
+  "toast.session.involvement.download.title": "Involvement summary downloaded",
+  "toast.session.involvement.download.description": "Saved summary to {{filename}}",
 
   "toast.session.listFailed.title": "Не вдалося завантажити сесії для {{project}}",
   "toast.project.reloadFailed.title": "Не вдалося перезавантажити {{project}}",
@@ -772,6 +774,7 @@ export const dict = {
 
   "session.tab.session": "Сесія",
   "session.tab.review": "Огляд",
+  "session.involvement.download": "Download involvement summary",
   "session.tab.context": "Контекст",
   "session.tab.unknown": "Невідома сесія",
   "session.panel.reviewAndFiles": "Огляд і файли",

@@ -516,6 +516,8 @@ export const dict = {
   "toast.session.export.success.description": "Istunto tallennettu tiedostoon {{filename}}",
   "toast.session.export.failed.title": "Istunnon vieminen epäonnistui",
   "toast.session.export.failed.description": "Istuntoa vietäessä tapahtui virhe",
+  "toast.session.involvement.download.title": "Involvement summary downloaded",
+  "toast.session.involvement.download.description": "Saved summary to {{filename}}",
 
   "toast.session.listFailed.title": "Projektin {{project}} istuntojen lataaminen epäonnistui",
   "toast.project.reloadFailed.title": "Projektin {{project}} lataaminen uudelleen epäonnistui",
@@ -600,6 +602,7 @@ export const dict = {
   "home.providerTip": "Yhdistä yli 75 palveluntarjoajaan käyttääksesi muita malleja, kuten Claude, GPT, Gemini jne",
   "session.tab.session": "Istunto",
   "session.tab.review": "Tarkistus",
+  "session.involvement.download": "Download involvement summary",
   "session.tab.context": "Konteksti",
   "session.tab.unknown": "Tuntematon istunto",
   "session.panel.reviewAndFiles": "Tarkistus ja tiedostot",

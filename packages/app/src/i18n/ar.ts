@@ -617,6 +617,8 @@ export const dict = {
   "toast.session.export.success.description": "تم حفظ الجلسة في \u2068{{filename}}\u2069",
   "toast.session.export.failed.title": "فشل تصدير الجلسة",
   "toast.session.export.failed.description": "حدث خطأ أثناء تصدير الجلسة",
+  "toast.session.involvement.download.title": "Involvement summary downloaded",
+  "toast.session.involvement.download.description": "Saved summary to {{filename}}",
 
   "toast.session.listFailed.title": "فشل تحميل الجلسات لـ {{project}}",
   "toast.update.title": "تحديث متاح",
@@ -689,6 +691,7 @@ export const dict = {
   "home.providerTip": "اتصل بأكثر من 75 موفرًا لاستخدام نماذج أخرى، بما فيها Claude وGPT وGemini وغيرها",
   "session.tab.session": "جلسة",
   "session.tab.review": "مراجعة",
+  "session.involvement.download": "Download involvement summary",
   "session.tab.context": "سياق",
   "session.tab.unknown": "جلسة غير معروفة",
   "session.panel.reviewAndFiles": "المراجعة والملفات",

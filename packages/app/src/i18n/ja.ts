@@ -619,6 +619,8 @@ export const dict = {
   "toast.session.export.success.description": "セッションを {{filename}} に保存しました",
   "toast.session.export.failed.title": "セッションのエクスポートに失敗しました",
   "toast.session.export.failed.description": "セッションのエクスポート中にエラーが発生しました",
+  "toast.session.involvement.download.title": "Involvement summary downloaded",
+  "toast.session.involvement.download.description": "Saved summary to {{filename}}",
 
   "toast.session.listFailed.title": "{{project}}のセッション読み込みに失敗しました",
   "toast.update.title": "アップデートが利用可能です",
@@ -692,6 +694,7 @@ export const dict = {
   "home.providerTip": "75以上のプロバイダーに接続して、Claude、GPT、Geminiなどの他のモデルを利用できます",
   "session.tab.session": "セッション",
   "session.tab.review": "レビュー",
+  "session.involvement.download": "Download involvement summary",
   "session.tab.context": "コンテキスト",
   "session.tab.unknown": "不明なセッション",
   "session.panel.reviewAndFiles": "レビューとファイル",
