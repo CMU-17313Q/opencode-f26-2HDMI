@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test"
 import type { Event } from "@opencode-ai/sdk/v2"
-import { createSessionData, flushInterrupted, reduceSessionData } from "@/cli/cmd/run/session-data"
+import { createSessionData, flushInterrupted, formatError, reduceSessionData } from "@/cli/cmd/run/session-data"
 import type { StreamCommit } from "@/cli/cmd/run/types"
 
 function reduce(data: ReturnType<typeof createSessionData>, event: unknown, thinking = true) {
@@ -111,6 +111,12 @@ function tool(input: { id: string; messageID: string; tool: string; state: Recor
 }
 
 describe("run session data", () => {
+  test("formats context overflow with actionable guidance", () => {
+    expect(formatError({ name: "ContextOverflowError", data: { message: "raw provider error" } })).toBe(
+      "Your prompt is too large for this model's context window. Try shortening the conversation or starting a new session, then send the prompt again.",
+    )
+  })
+
   test("buffers delayed assistant text until the role is known", () => {
     let data = createSessionData()
     data = reduce(data, delta("msg-1", "txt-1", "hello")).data
