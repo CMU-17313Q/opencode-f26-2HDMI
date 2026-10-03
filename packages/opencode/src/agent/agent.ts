@@ -185,10 +185,17 @@ const layer = Layer.effect(
             description: "Learn mode. Tutors with questions and hints instead of implementing the solution.",
             options: {},
             prompt: PROMPT_LEARN,
+            // Read/search only, like plan, but without plan's .opencode/plans/*.md write exception.
             permission: Permission.merge(
               defaults,
               Permission.fromConfig({
                 question: "allow",
+                task: {
+                  general: "deny",
+                },
+                edit: {
+                  "*": "deny",
+                },
               }),
               user,
             ),
