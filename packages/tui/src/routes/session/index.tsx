@@ -1931,7 +1931,9 @@ export function AssistantMessageError(props: {
         customBorderChars={SplitBorder.customBorderChars}
         borderColor={props.borderColor}
       >
-        <text fg={props.color}>{errorMessage(props.error)}</text>
+        <text fg={props.color} wrapMode="word">
+          {errorMessage(props.error)}
+        </text>
       </box>
     </Show>
   )
