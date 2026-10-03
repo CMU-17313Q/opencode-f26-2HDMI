@@ -4,6 +4,7 @@ import { AgentV2 } from "@opencode-ai/core/agent"
 import { AppNodeBuilder } from "@opencode-ai/core/effect/app-node-builder"
 import { Location } from "@opencode-ai/core/location"
 import { AgentPlugin } from "@opencode-ai/core/plugin/agent"
+import { PermissionV2 } from "@opencode-ai/core/permission"
 import { AbsolutePath } from "@opencode-ai/core/schema"
 import { location } from "./fixture/location"
 import { testEffect } from "./lib/effect"
@@ -119,6 +120,7 @@ describe("AgentV2", () => {
         "compaction",
         "explore",
         "general",
+        "learn",
         "plan",
         "summary",
         "title",
@@ -126,6 +128,38 @@ describe("AgentV2", () => {
       for (const item of agents) {
         expect(item.permissions.some((rule) => rule.action === "bash" && rule.effect !== "deny")).toBe(false)
       }
+    }),
+  )
+
+  it.effect("learn denies edits but keeps read access while build can edit", () =>
+    Effect.gen(function* () {
+      const agent = yield* AgentV2.Service
+      yield* AgentPlugin.Plugin.effect(
+        host({
+          agent: agentHost(agent),
+        }),
+      ).pipe(
+        Effect.provideService(
+          Location.Service,
+          Location.Service.of(location({ directory: AbsolutePath.make("/project") })),
+        ),
+      )
+
+      const learn = yield* agent.get(AgentV2.ID.make("learn"))
+      const build = yield* agent.get(AgentV2.ID.make("build"))
+      const plan = yield* agent.get(AgentV2.ID.make("plan"))
+      expect(learn).toBeDefined()
+      expect(build).toBeDefined()
+      expect(plan).toBeDefined()
+
+      expect(PermissionV2.evaluate("edit", "*", learn!.permissions).effect).toBe("deny")
+      expect(PermissionV2.evaluate("edit", "src/index.ts", learn!.permissions).effect).toBe("deny")
+      expect(PermissionV2.evaluate("edit", ".opencode/plans/foo.md", learn!.permissions).effect).toBe("deny")
+      expect(PermissionV2.evaluate("read", "src/index.ts", learn!.permissions).effect).toBe("allow")
+      expect(PermissionV2.evaluate("grep", "*", learn!.permissions).effect).toBe("allow")
+
+      expect(PermissionV2.evaluate("edit", "src/index.ts", build!.permissions).effect).toBe("allow")
+      expect(PermissionV2.evaluate("edit", ".opencode/plans/foo.md", plan!.permissions).effect).toBe("allow")
     }),
   )
 })
