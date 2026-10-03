@@ -121,6 +121,77 @@ it.instance(
   },
 )
 
+it.instance("learn agent denies edits including .opencode/plans/*", () =>
+  Effect.gen(function* () {
+    const learn = yield* load((svc) => svc.get("learn"))
+    expect(learn).toBeDefined()
+    expect(evalPerm(learn, "edit")).toBe("deny")
+    expect(Permission.evaluate("edit", "src/index.ts", learn!.permission).action).toBe("deny")
+    // Unlike plan, learn cannot write plan files either
+    expect(Permission.evaluate("edit", ".opencode/plans/foo.md", learn!.permission).action).toBe("deny")
+  }),
+)
+
+it.instance("learn agent hides edit, write, and apply_patch tools", () =>
+  Effect.gen(function* () {
+    const learn = yield* load((svc) => svc.get("learn"))
+    expect(learn).toBeDefined()
+    const hidden = Permission.disabled(["edit", "write", "apply_patch", "read", "grep", "glob"], learn!.permission)
+    expect([...hidden].sort()).toEqual(["apply_patch", "edit", "write"])
+  }),
+)
+
+it.instance("learn agent can still read and search files", () =>
+  Effect.gen(function* () {
+    const learn = yield* load((svc) => svc.get("learn"))
+    expect(learn).toBeDefined()
+    expect(evalPerm(learn, "read")).toBe("allow")
+    expect(evalPerm(learn, "grep")).toBe("allow")
+    expect(evalPerm(learn, "glob")).toBe("allow")
+    expect(Permission.evaluate("read", "src/index.ts", learn!.permission).action).toBe("allow")
+    expect(Permission.evaluate("read", ".env", learn!.permission).action).toBe("ask")
+  }),
+)
+
+it.instance("learn agent denies the general subagent by default", () =>
+  Effect.gen(function* () {
+    const learn = yield* load((svc) => svc.get("learn"))
+    expect(learn).toBeDefined()
+    expect(Permission.evaluate("task", "general", learn!.permission).action).toBe("deny")
+    expect(Permission.evaluate("task", "explore", learn!.permission).action).toBe("allow")
+  }),
+)
+
+it.instance("build agent keeps edit permissions alongside learn", () =>
+  Effect.gen(function* () {
+    const learn = yield* load((svc) => svc.get("learn"))
+    const build = yield* load((svc) => svc.get("build"))
+    const plan = yield* load((svc) => svc.get("plan"))
+    expect(evalPerm(learn, "edit")).toBe("deny")
+    expect(evalPerm(build, "edit")).toBe("allow")
+    expect(Permission.evaluate("edit", "src/index.ts", build!.permission).action).toBe("allow")
+    expect(Permission.disabled(["edit", "write", "apply_patch"], build!.permission).size).toBe(0)
+    // learn does not change plan's own exception
+    expect(Permission.evaluate("edit", ".opencode/plans/foo.md", plan!.permission).action).toBe("allow")
+  }),
+)
+
+it.instance(
+  "agent permission config can re-enable edits for learn",
+  () =>
+    Effect.gen(function* () {
+      const learn = yield* load((svc) => svc.get("learn"))
+      expect(evalPerm(learn, "edit")).toBe("allow")
+    }),
+  {
+    config: {
+      agent: {
+        learn: { permission: { edit: "allow" } },
+      },
+    },
+  },
+)
+
 it.instance("explore agent denies edit and write", () =>
   Effect.gen(function* () {
     const explore = yield* load((svc) => svc.get("explore"))
