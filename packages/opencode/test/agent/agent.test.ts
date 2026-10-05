@@ -50,6 +50,7 @@ it.instance("returns default native agents when no config", () =>
     const names = agents.map((a) => a.name)
     expect(names).toContain("build")
     expect(names).toContain("plan")
+    expect(names).toContain("learn")
     expect(names).toContain("general")
     expect(names).toContain("explore")
     expect(names).toContain("compaction")
@@ -66,6 +67,17 @@ it.instance("build agent has correct default properties", () =>
     expect(build?.native).toBe(true)
     expect(evalPerm(build, "edit")).toBe("allow")
     expect(evalPerm(build, "bash")).toBe("allow")
+  }),
+)
+
+it.instance("learn agent is a native primary tutor", () =>
+  Effect.gen(function* () {
+    const learn = yield* load((svc) => svc.get("learn"))
+    expect(learn).toBeDefined()
+    expect(learn?.mode).toBe("primary")
+    expect(learn?.native).toBe(true)
+    expect(learn?.prompt).toContain("Socratic coding tutor")
+    expect(yield* load((svc) => svc.defaultAgent())).toBe("build")
   }),
 )
 
@@ -749,6 +761,7 @@ it.instance(
       agent: {
         build: { disable: true },
         plan: { disable: true },
+        learn: { disable: true },
       },
     },
   },
