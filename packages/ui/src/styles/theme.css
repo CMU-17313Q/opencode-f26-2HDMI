@@ -279,6 +279,7 @@
   --icon-on-interactive-base: #fcfcfc;
   --icon-agent-plan-base: #a753ae;
   --icon-agent-docs-base: #fcb239;
+  --icon-agent-learn-base: #13a35a;
   --icon-agent-ask-base: #2090f5;
   --icon-agent-build-base: #034cff;
   --v2-agent-plan-solid: var(--v2-pink-800);
@@ -550,6 +551,7 @@
     --icon-on-interactive-base: #ededed;
     --icon-agent-plan-base: #edb2f1;
     --icon-agent-docs-base: #fbb73c;
+    --icon-agent-learn-base: #5fd394;
     --icon-agent-ask-base: #2090f5;
     --icon-agent-build-base: #9dbefe;
     --v2-agent-plan-solid: var(--v2-pink-400);

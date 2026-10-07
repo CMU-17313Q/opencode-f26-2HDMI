@@ -382,6 +382,7 @@ const agentTones: Record<string, string> = {
   ask: "var(--icon-agent-ask-base)",
   build: "var(--icon-agent-build-base)",
   docs: "var(--icon-agent-docs-base)",
+  learn: "var(--icon-agent-learn-base)",
   plan: "var(--icon-agent-plan-base)",
 }
 
