@@ -158,6 +158,7 @@ export const dict = {
   "command.agent.cycle.description": "Lülituge järgmisele agendile",
   "command.agent.cycle.reverse": "Tsükli agent tagurpidi",
   "command.agent.cycle.reverse.description": "Lülituge eelmisele agendile",
+  "prompt.agent.learn": "Learn (juhendaja)",
   "command.model.variant.cycle": "Tsükli mõtlemise pingutus",
   "command.model.variant.cycle.description": "Lülituge järgmisele pingutustasemele",
   "command.prompt.mode.shell": "Shell",

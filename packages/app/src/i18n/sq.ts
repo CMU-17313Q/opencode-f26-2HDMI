@@ -159,6 +159,7 @@ export const dict = {
   "command.agent.cycle.description": "Kalo te agjenti tjetër",
   "command.agent.cycle.reverse": "Agjenti i mëparshëm",
   "command.agent.cycle.reverse.description": "Kalo te agjenti i mëparshëm",
+  "prompt.agent.learn": "Learn (tutor)",
   "command.model.variant.cycle": "Niveli tjetër i arsyetimit",
   "command.model.variant.cycle.description": "Kalo në nivelin tjetër të përpjekjes",
   "command.prompt.mode.shell": "Shell",

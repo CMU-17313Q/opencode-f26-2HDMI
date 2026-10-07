@@ -176,6 +176,7 @@ export const dict = {
   "command.agent.cycle.description": "Sonraki ajana geç",
   "command.agent.cycle.reverse": "Ajanı geri değiştir",
   "command.agent.cycle.reverse.description": "Önceki ajana geç",
+  "prompt.agent.learn": "Learn (eğitmen)",
   "command.model.variant.cycle": "Düşünme eforu değiştir",
   "command.model.variant.cycle.description": "Sonraki efor seviyesine geç",
   "command.prompt.mode.shell": "Kabuk",

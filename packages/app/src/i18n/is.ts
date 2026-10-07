@@ -162,6 +162,7 @@ export const dict = {
   "command.agent.cycle.description": "Skiptu yfir í næsta fulltrúa",
   "command.agent.cycle.reverse": "Skipta yfir í fyrri fulltrúa",
   "command.agent.cycle.reverse.description": "Skiptu yfir í fyrri fulltrúa",
+  "prompt.agent.learn": "Learn (leiðbeinandi)",
   "command.model.variant.cycle": "Hringrásarhugsunarátak",
   "command.model.variant.cycle.description": "Skiptu yfir á næsta átaksstig",
   "command.prompt.mode.shell": "Skel",

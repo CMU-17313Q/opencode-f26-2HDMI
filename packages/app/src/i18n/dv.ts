@@ -161,6 +161,7 @@ export const dict = {
   "command.agent.cycle.description": "ދެން ހުރި އޭޖެންޓަކަށް ބަދަލުވާށެވެ",
   "command.agent.cycle.reverse": "ސައިކަލް އޭޖެންޓް ފަހަތަށް",
   "command.agent.cycle.reverse.description": "ކުރީގެ އޭޖެންޓަށް ބަދަލުވާށެވެ",
+  "prompt.agent.learn": "Learn (ކިޔަވައިދޭ މީހާ)",
   "command.model.variant.cycle": "ސައިކަލް ވިސްނުމުގެ މަސައްކަތެވެ",
   "command.model.variant.cycle.description": "ދެން އޮންނަ މަސައްކަތުގެ ފެންވަރަށް ބަދަލުވާށެވެ",
   "command.prompt.mode.shell": "ޝެލް",

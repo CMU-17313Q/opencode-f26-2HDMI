@@ -165,6 +165,7 @@ export const dict = {
   "command.agent.cycle.description": "अगले एजेंट पर स्विच करें",
   "command.agent.cycle.reverse": "पिछला एजेंट चुनें",
   "command.agent.cycle.reverse.description": "पिछले एजेंट पर स्विच करें",
+  "prompt.agent.learn": "Learn (ट्यूटर)",
   "command.model.variant.cycle": "तर्क का स्तर बदलें",
   "command.model.variant.cycle.description": "तर्क के अगले स्तर पर जाएँ",
   "command.prompt.mode.shell": "शेल",

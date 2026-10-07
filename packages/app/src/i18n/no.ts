@@ -170,6 +170,7 @@ export const dict = {
   "command.agent.cycle.description": "Bytt til neste agent",
   "command.agent.cycle.reverse": "Bytt agent bakover",
   "command.agent.cycle.reverse.description": "Bytt til forrige agent",
+  "prompt.agent.learn": "Learn (veileder)",
   "command.model.variant.cycle": "Bytt tenkeinnsats",
   "command.model.variant.cycle.description": "Bytt til neste innsatsnivå",
   "command.prompt.mode.shell": "Shell",

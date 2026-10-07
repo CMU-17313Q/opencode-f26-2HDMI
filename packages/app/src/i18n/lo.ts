@@ -158,6 +158,7 @@ export const dict = {
   "command.agent.cycle.description": "ສະຫຼັບໄປຫາຕົວແທນຕໍ່ໄປ",
   "command.agent.cycle.reverse": "ວົງຈອນຕົວແທນກັບຫຼັງ",
   "command.agent.cycle.reverse.description": "ສະຫຼັບໄປຫາຕົວແທນກ່ອນໜ້າ",
+  "prompt.agent.learn": "Learn (ຄູສອນ)",
   "command.model.variant.cycle": "ຄວາມພະຍາຍາມຄິດຮອບວຽນ",
   "command.model.variant.cycle.description": "ປ່ຽນໄປສູ່ລະດັບຄວາມພະຍາຍາມຕໍ່ໄປ",
   "command.prompt.mode.shell": "Shell",

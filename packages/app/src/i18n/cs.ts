@@ -158,6 +158,7 @@ export const dict = {
   "command.agent.cycle.description": "Přepněte na dalšího agenta",
   "command.agent.cycle.reverse": "Cyklujte agenta zpět",
   "command.agent.cycle.reverse.description": "Přepnout na předchozího agenta",
+  "prompt.agent.learn": "Learn (lektor)",
   "command.model.variant.cycle": "Cyklické myšlení",
   "command.model.variant.cycle.description": "Přepněte na další úroveň úsilí",
   "command.prompt.mode.shell": "Shell",

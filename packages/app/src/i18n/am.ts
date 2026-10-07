@@ -158,6 +158,7 @@ export const dict = {
   "command.agent.cycle.description": "ወደሚቀጥለው ወኪል ቀይር",
   "command.agent.cycle.reverse": "ወደቀድሞው ወኪል ቀይር",
   "command.agent.cycle.reverse.description": "ወደ ቀዳሚው ወኪል ቀይር",
+  "prompt.agent.learn": "Learn (አስጠኚ)",
   "command.model.variant.cycle": "የማሰብ ጥረት ደረጃን ቀይር",
   "command.model.variant.cycle.description": "ወደሚቀጥለው የጥረት ደረጃ ቀይር",
   "command.prompt.mode.shell": "ሼል",

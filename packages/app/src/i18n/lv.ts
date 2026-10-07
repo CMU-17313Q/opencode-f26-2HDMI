@@ -158,6 +158,7 @@ export const dict = {
   "command.agent.cycle.description": "Pārslēgt uz nākamo aģentu",
   "command.agent.cycle.reverse": "Mainīt aģentu atpakaļ",
   "command.agent.cycle.reverse.description": "Pārslēgt uz iepriekšējo aģentu",
+  "prompt.agent.learn": "Learn (pasniedzējs)",
   "command.model.variant.cycle": "Mainīt domāšanas līmeni",
   "command.model.variant.cycle.description": "Pārslēgt uz nākamo līmeni",
   "command.prompt.mode.shell": "Čaula",
