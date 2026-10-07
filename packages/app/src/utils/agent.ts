@@ -32,6 +32,11 @@ export function agentColor(name: string, custom?: string) {
   return defaults[name] ?? defaults[name.toLowerCase()] ?? tone(name.toLowerCase())
 }
 
+export function agentLabel(name: string, t: (key: "prompt.agent.learn") => string) {
+  if (name.toLowerCase() === "learn") return t("prompt.agent.learn")
+  return name
+}
+
 export function messageAgentColor(
   list: readonly { role: string; agent?: string }[] | undefined,
   agents: readonly { name: string; color?: string }[],
