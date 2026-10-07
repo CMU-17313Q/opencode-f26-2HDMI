@@ -15,6 +15,7 @@ const lightAgentTokens: Record<string, V2ColorValue> = {
   "v2-agent-explore-background": "rgba(254, 250, 236, 0.1)",
   "v2-agent-review-solid": ref("v2-green-800"),
   "v2-agent-writer-solid": ref("v2-purple-700"),
+  "v2-agent-learn-solid": ref("v2-cyan-800"),
 }
 
 const darkAgentTokens: Record<string, V2ColorValue> = {
@@ -29,6 +30,7 @@ const darkAgentTokens: Record<string, V2ColorValue> = {
   "v2-agent-explore-background": "rgba(172, 136, 51, 0.05)",
   "v2-agent-review-solid": ref("v2-green-300"),
   "v2-agent-writer-solid": ref("v2-purple-400"),
+  "v2-agent-learn-solid": ref("v2-cyan-300"),
 }
 
 const light: Record<string, V2ColorValue> = {

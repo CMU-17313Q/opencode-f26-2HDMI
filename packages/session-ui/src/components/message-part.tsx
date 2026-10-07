@@ -389,6 +389,7 @@ const agentTones: Record<string, string> = {
 const v2AgentTones: Record<string, string> = {
   build: "var(--v2-agent-build-solid)",
   explore: "var(--v2-agent-explore-solid)",
+  learn: "var(--v2-agent-learn-solid)",
   plan: "var(--v2-agent-plan-solid)",
   review: "var(--v2-agent-review-solid)",
   writer: "var(--v2-agent-writer-solid)",
