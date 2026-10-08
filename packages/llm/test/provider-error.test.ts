@@ -13,6 +13,7 @@ describe("provider error classification", () => {
       "Prompt has 5,958,968 tokens, but the configured context size is 256,000 tokens",
       "Too many tokens",
       "Token limit exceeded",
+      "Input exceeds the context window. Maximum output tokens: 4096.",
     ]
 
     expect(messages.every(isContextOverflow)).toBe(true)
@@ -26,5 +27,18 @@ describe("provider error classification", () => {
     ]
 
     expect(messages.some(isContextOverflow)).toBe(false)
+  })
+
+  // Ensure output token limits are not mistaken for input context overflow.
+  test("does not classify output token limits as context overflow", () => {
+    const messages = [
+      "Output token limit exceeded",
+      "Maximum output tokens reached",
+      "Generation stopped because the output token limit was reached",
+    ]
+
+    for (const message of messages) {
+      expect(isContextOverflow(message)).toBe(false)
+    }
   })
 })
