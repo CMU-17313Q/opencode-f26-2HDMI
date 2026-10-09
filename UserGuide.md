@@ -12,35 +12,56 @@ This feature allows users to review the scope of AI involvement in a coding sess
 
 ## User Story 2: Actionable Context-Overflow Errors
 
-This feature helps users understand when their prompts exceed a model's context window and provides guidance on how to proceed.
+### What Is a Context-Window Error?
 
+Every AI model has a limit on how much information it can process at once, including your prompt and previous conversation history. This is called its **context window**.
 
-### Provider Context-Overflow Classification (Issue #11)
+If your conversation or prompt exceeds this limit, the AI provider may reject the request.
 
-#### Overview
+OpenCode recognizes this type of error and displays a helpful message explaining what happened and how to continue.
 
-OpenCode identifies when an AI provider rejects a request because the input exceeds the model's context window. These errors are classified as `ContextOverflowError` instead of generic API failures.
+### What Will I See?
 
-The classification distinguishes context-window errors from unrelated failures, such as rate limiting, quota exhaustion, server errors, and output-token limits. Context-overflow errors are also excluded from automatic retries.
+If your prompt exceeds the model's context window, OpenCode displays:
 
-#### User Testing
+> Your prompt is too large for this model's context window. Try shortening the conversation or starting a new session, then send the prompt again.
 
-**Note:** This feature handles provider-error classification internally and does not introduce a standalone user interface. Therefore, its behavior cannot be directly verified through the UI alone. The resulting user-facing guidance is handled by Issue #12 and the related CLI/TUI presentation issues.
+Instead of displaying confusing technical information from the AI provider, OpenCode gives you steps you can take to resolve the problem.
 
-To verify this contribution independently, use the automated tests listed below. These test the classification and session-error behavior without requiring a live AI provider.
+### What Should I Do?
 
-#### Automated Tests
+If you encounter this message:
 
-The following automated tests are available in the repository:
+1. **Shorten your prompt.** Remove unnecessary details or split a large request into smaller parts.
+2. **Start a new session.** If the conversation has become very long, starting a new session can reduce the amount of context being sent to the model.
+3. **Try again.** Resubmit your shortened request or continue in the new session.
 
-- **`packages/llm/test/provider-error.test.ts`** — Verifies that input context-overflow messages are recognized while rate-limit errors are excluded. Additional regression tests added in Sprint 2 verify that output-token limits are not misclassified as context overflow and that genuine input-context errors remain recognized even when output-token information appears in the same message.
+### How Can I Test This Feature?
 
-- **`packages/opencode/test/session/message-v2.test.ts`** — Verifies that structured error codes, HTTP 413, and message-only provider errors are converted into `ContextOverflowError`, while unrelated API failures retain their appropriate error types.
+1. Launch OpenCode and connect an AI provider.
+2. Start a conversation and submit prompts as usual.
+3. If the provider rejects a request because it exceeds the model's context window, check that OpenCode displays the actionable message above.
+4. Follow the suggested steps and try sending your request again.
 
-- **`packages/opencode/test/session/retry.test.ts`** — Verifies that context-overflow errors are not automatically retried and that existing retry behavior for other errors is preserved.
+**Note:** Context-window limits vary by model, so this error may not occur during ordinary use. You do not need to deliberately exceed the limit to use this feature.
 
-Together, these tests cover the main acceptance criteria through both positive and negative cases. They verify the classification logic and its integration with session error handling, ensuring that context-overflow errors are correctly identified without changing how unrelated provider errors are handled.
+### Developer Testing Notes
 
+This error classification and error message parts of the feature were implemented across Issues #11 and #12.
+
+**Issue #11 — Error recognition:**
+- `packages/llm/test/provider-error.test.ts` — Checks that context-window errors are recognized without confusing them with unrelated provider errors.
+- `packages/opencode/test/session/message-v2.test.ts` — Checks that provider errors are converted into the correct session error type.
+- `packages/opencode/test/session/retry.test.ts` — Checks that context-overflow errors are not automatically retried.
+
+**Issue #12 — User-facing guidance:**
+- `packages/core/test/session-error-message.test.ts` — Checks the shared guidance message and ensures raw provider details are not displayed.
+- `packages/opencode/test/cli/error.test.ts` — Checks CLI error formatting.
+- `packages/opencode/test/cli/run/session-data.test.ts` — Checks CLI session-data handling.
+- `packages/opencode/test/cli/run/stream.transport.test.ts` — Checks CLI streaming error handling.
+- `packages/tui/test/util/error.test.ts` — Checks TUI error formatting.
+
+Together, these tests cover error recognition, message presentation, and the handling of unrelated errors. They test the main acceptance criteria without depending on a live provider to produce a context-window error.
 
 ## Learn shows as a tutor in the desktop agent switcher
 
