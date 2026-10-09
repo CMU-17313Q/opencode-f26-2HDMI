@@ -63,7 +63,7 @@ This error classification and error message parts of the feature were implemente
 
 Together, these tests cover error recognition, message presentation, and the handling of unrelated errors. They test the main acceptance criteria without depending on a live provider to produce a context-window error.
 
-## Learn shows as a tutor in the desktop agent switcher
+## User Story 3: Tutor Mode in Opencode (Not part of Sprint 1 - extra bonus feature under development) 
 
 Issue: [#31](https://github.com/CMU-17313Q/opencode-f26-2HDMI/issues/31), PR [#36](https://github.com/CMU-17313Q/opencode-f26-2HDMI/pull/36)
 
