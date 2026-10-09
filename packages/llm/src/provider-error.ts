@@ -31,7 +31,13 @@ const patterns = [
   /token limit exceeded/i,
 ]
 
-const exclusions = [/^(throttling error|service unavailable):/i, /rate limit/i, /too many requests/i]
+const exclusions = [
+  /^(throttling error|service unavailable):/i,
+  /rate limit/i,
+  /too many requests/i,
+  /^(?!.*(?:input|prompt|context window|context length)).*output token limit/i,
+  /^(?!.*(?:input|prompt|context window|context length)).*maximum output tokens/i,
+]
 
 export const isContextOverflow = (message: string) =>
   !exclusions.some((pattern) => pattern.test(message)) &&
