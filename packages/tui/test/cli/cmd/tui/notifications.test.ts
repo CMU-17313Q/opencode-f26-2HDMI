@@ -225,6 +225,36 @@ describe("internal notifications TUI plugin", () => {
     ])
   })
 
+  test("uses safe actionable text for context overflow session errors", async () => {
+    const harness = await setup()
+
+    harness.emit({
+      id: "event-1",
+      type: "session.status",
+      properties: { sessionID: "session", status: { type: "busy" } },
+    })
+    harness.emit({
+      id: "event-2",
+      type: "session.error",
+      properties: {
+        sessionID: "session",
+        error: {
+          name: "ContextOverflowError",
+          data: { message: "raw provider message", responseBody: "raw provider response" },
+        },
+      },
+    })
+
+    expect(harness.notifications).toEqual([
+      {
+        title: "Demo session",
+        message: "Prompt exceeds model context. Shorten the conversation or start a new session.",
+        notification: { when: "blurred" },
+        sound: { name: "error", when: "always" },
+      },
+    ])
+  })
+
   test("special-cases aborts and model response timeouts", async () => {
     const harness = await setup()
 
