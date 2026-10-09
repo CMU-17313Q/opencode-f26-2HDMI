@@ -1,6 +1,6 @@
 # User Guide
 
-This guide describes the features our team added to opencode, how to use them, and how to test them.
+Draft, for my part only (iibrohim). This file covers only Issue #15 and was written while the PR was in review. The final team version is in UserGuide.md.
 
 ## Friendly context-overflow error in the TUI conversation view
 
