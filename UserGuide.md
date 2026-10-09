@@ -41,3 +41,22 @@ The following automated tests are available in the repository:
 
 Together, these tests cover the main acceptance criteria through both positive and negative cases. They verify the classification logic and its integration with session error handling, ensuring that context-overflow errors are correctly identified without changing how unrelated provider errors are handled.
 
+
+## Learn shows as a tutor in the desktop agent switcher
+
+Issue: [#31](https://github.com/CMU-17313Q/opencode-f26-2HDMI/issues/31), PR [#36](https://github.com/CMU-17313Q/opencode-f26-2HDMI/pull/36)
+
+### What it does
+In the desktop app, the agent switcher in the composer lists Learn as **Learn (tutor)** with its own color, so students can tell the tutor apart from build and plan. Students switch back to `build` from the same dropdown.
+
+### How to user test it
+1. Run the desktop app and open a session.
+2. Open the agent switcher next to the prompt box. **Learn (tutor)** is listed next to build and plan.
+3. Select it and send a prompt. The agent label uses the Learn color in light and dark mode.
+4. Select `build` again and confirm the next prompt uses build.
+
+### Automated tests
+- **`packages/app/src/utils/agent.test.ts`** checks that `agentLabel` labels Learn as a tutor and leaves other agents unchanged, and that `agentColor` gives Learn its own color for any letter case.
+- **`packages/app/src/i18n/parity.test.ts`** checks the new label exists in every locale.
+
+These cover the new logic. Listing and switching agents reuse unchanged code.
