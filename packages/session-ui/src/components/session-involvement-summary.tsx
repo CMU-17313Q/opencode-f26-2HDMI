@@ -19,6 +19,8 @@ export function SessionInvolvementSummary(props: {
   class?: string
   downloadLabel?: string
   onDownload?: (markdown: string) => void
+  copyLabel?: string
+  onCopy?: (markdown: string) => void
 }) {
   const i18n = useI18n()
   const rows = createMemo(() => toSessionInvolvementRows(props.diffs))
@@ -48,6 +50,19 @@ export function SessionInvolvementSummary(props: {
                 aria-label={props.downloadLabel}
                 title={props.downloadLabel}
                 onClick={() => onDownload()(toSessionInvolvementMarkdown(rows()))}
+              />
+            )}
+          </Show>
+          <Show when={props.onCopy}>
+            {(onCopy) => (
+              <IconButton
+                data-slot="session-involvement-copy"
+                icon="copy"
+                size="normal"
+                variant="ghost"
+                aria-label={props.copyLabel}
+                title={props.copyLabel}
+                onClick={() => onCopy()(toSessionInvolvementMarkdown(rows()))}
               />
             )}
           </Show>
