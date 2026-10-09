@@ -18,6 +18,9 @@ function notify(api: TuiPluginApi, sessionID: string | undefined, message: strin
 }
 
 function sessionErrorMessage(error: SessionError) {
+  if (error?.name === "ContextOverflowError") {
+    return "Prompt exceeds model context. Shorten the conversation or start a new session."
+  }
   if (error?.name === "MessageAbortedError") return "Session aborted"
   const data = error?.data
   if (data && typeof data === "object" && "message" in data && data.message === "SSE read timed out") {
