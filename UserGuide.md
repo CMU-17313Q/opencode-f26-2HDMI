@@ -53,6 +53,17 @@ If system notifications are enabled, you can also check the notification generat
 
 **Note:** Context-window limits vary by model, so this error may not occur during ordinary use. You do not need to deliberately exceed the limit to use this feature.
 
+### Testing in the Terminal UI (Issue #15)
+
+In the terminal UI, the message appears in the red error panel under the assistant message that failed. To check it:
+
+1. Start the TUI and pick a model with a small context window. A local model through Ollama or LM Studio with a 2–4k token context works well.
+2. Paste a prompt that is well over that limit and send it.
+3. Check that the red-bordered panel under the assistant message shows the actionable message, and no provider text such as `prompt is too long: … tokens` or a JSON response body.
+4. Resize the terminal to about 40 columns. The message should wrap over several lines without splitting words.
+5. Trigger a different error (for example, an invalid API key) and confirm the panel still shows that error's own message.
+6. Send a prompt and press `Esc` to interrupt it. No error panel should appear.
+
 ### Developer Testing Notes
 
 The context-overflow feature was implemented across several issues, covering error recognition (issue 11), user-facing guidance (issue 12), and system notifications (issue 16). The relevant automated tests are listed below.
@@ -68,6 +79,12 @@ The context-overflow feature was implemented across several issues, covering err
 - `packages/opencode/test/cli/run/session-data.test.ts` — Checks CLI session-data handling.
 - `packages/opencode/test/cli/run/stream.transport.test.ts` — Checks CLI streaming error handling.
 - `packages/tui/test/util/error.test.ts` — Checks TUI error formatting.
+
+**Issue #15 — TUI conversation view:**
+- `packages/tui/test/cli/tui/assistant-message-error.test.tsx` — Renders the real error panel used by the conversation view. Checks that a context-overflow error shows the actionable message, that the raw provider message and response body never appear on screen, that an overflow error with an empty provider message still renders without crashing, that generic errors keep their own message, that aborted messages and messages without an error show no panel, and that at 40 columns the message wraps without splitting words.
+- `packages/tui/test/util/error.test.ts` — Adds `errorMessage()` cases for overflow `Error` instances, overflow errors without a `data` payload, generic named errors such as `APIError` and `ProviderAuthError`, and plain strings, `null`, and `undefined`.
+
+Each Issue #15 acceptance criterion maps to at least one of these tests, and they use the real component with no mocks. The narrow-terminal test fails if the panel is switched to character wrapping, so it catches broken wrapping.
 
 **Issue #16 — System notifications:**
 
@@ -91,5 +108,32 @@ In the desktop app, the agent switcher in the composer lists Learn as **Learn (t
 ### Automated tests
 - **`packages/app/src/utils/agent.test.ts`** checks that `agentLabel` labels Learn as a tutor and leaves other agents unchanged, and that `agentColor` gives Learn its own color for any letter case.
 - **`packages/app/src/i18n/parity.test.ts`** checks the new label exists in every locale.
+These cover the new logic. Listing and switching agents reuse unchanged code
 
-These cover the new logic. Listing and switching agents reuse unchanged code.
+### Learn Mode Is Read-Only (Issue #29)
+
+Issue: [#29](https://github.com/CMU-17313Q/opencode-f26-2HDMI/issues/29), PR [#35](https://github.com/CMU-17313Q/opencode-f26-2HDMI/pull/35)
+
+**What it does:** Learn is a tutor, so it helps students reason through a problem instead of changing their code. It follows the same read-only pattern as `plan`:
+
+- **Edits are denied everywhere.** The `edit`, `write`, and `apply_patch` tools are hidden while Learn is selected.
+- **No plan-file exception.** Unlike `plan`, Learn cannot write `.opencode/plans/*.md` either.
+- **No delegating edits.** Learn cannot launch the `general` subagent, which can edit files. The read-only `explore` subagent is still allowed.
+- **Reading still works.** Learn can read files, search with `grep`/`glob`, and ask questions. Reading `.env` files still asks for permission first.
+- **Other agents are unchanged.** `build` keeps full edit permissions and `plan` keeps its plan-file exception, so switching back to Build restores editing right away.
+
+To let Learn edit anyway, add `"agent": { "learn": { "permission": { "edit": "allow" } } }` to your `opencode.json`.
+
+**How to user test it:**
+1. Start the TUI and press `Tab` until the prompt footer shows **Learn** (or pick **Learn (tutor)** in the desktop agent switcher).
+2. Ask: _"Fix the bug in `src/index.ts` and save the file."_ Learn should explain or hint at the fix without editing, and `git status` should show no changes.
+3. Ask: _"Write your plan to `.opencode/plans/plan.md`."_ No file should be created.
+4. Ask: _"Find every place `parseConfig` is called."_ Learn should search and read files normally.
+5. Switch back to **Build** and ask for the same fix. Build should edit the file as usual.
+
+**Automated tests:**
+- **`packages/opencode/test/agent/agent.test.ts`** loads the real agent service and checks Learn's permissions: edits are denied on every file, including `.opencode/plans/*.md`; exactly `edit`, `write`, and `apply_patch` are hidden; `read`, `grep`, and `glob` are allowed and `.env` still asks; the `general` subagent is denied and `explore` is allowed; `build` still edits and `plan` keeps its exception; and per-agent config can re-enable edits.
+- **`packages/core/test/agent.test.ts`** checks the same rules for Learn, `build`, and `plan` in the V2 agent plugin.
+
+Each Issue #29 acceptance criterion maps to at least one of these tests, in both the V1 (`packages/opencode`) and V2 (`packages/core`) agent setups. Reverting the permission change makes the new deny tests fail.
+
