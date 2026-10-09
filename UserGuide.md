@@ -28,6 +28,12 @@ If your prompt exceeds the model's context window, OpenCode displays:
 
 Instead of displaying confusing technical information from the AI provider, OpenCode gives you steps you can take to resolve the problem.
 
+When OpenCode is not focused and system notifications are enabled, you may also receive a shorter notification:
+
+> Prompt exceeds model context. Shorten the conversation or start a new session.
+
+This notification provides the same guidance in a more concise format, making it easier to understand what happened without returning to the conversation immediately.
+
 ### What Should I Do?
 
 If you encounter this message:
@@ -43,11 +49,13 @@ If you encounter this message:
 3. If the provider rejects a request because it exceeds the model's context window, check that OpenCode displays the actionable message above.
 4. Follow the suggested steps and try sending your request again.
 
+If system notifications are enabled, you can also check the notification generated when a context-window error occurs. When OpenCode is not focused, the notification should display the shorter message shown above, without including raw provider error details.
+
 **Note:** Context-window limits vary by model, so this error may not occur during ordinary use. You do not need to deliberately exceed the limit to use this feature.
 
 ### Developer Testing Notes
 
-This error classification and error message parts of the feature were implemented across Issues #11 and #12.
+The context-overflow feature was implemented across several issues, covering error recognition (issue 11), user-facing guidance (issue 12), and system notifications (issue 16). The relevant automated tests are listed below.
 
 **Issue #11 — Error recognition:**
 - `packages/llm/test/provider-error.test.ts` — Checks that context-window errors are recognized without confusing them with unrelated provider errors.
@@ -61,7 +69,11 @@ This error classification and error message parts of the feature were implemente
 - `packages/opencode/test/cli/run/stream.transport.test.ts` — Checks CLI streaming error handling.
 - `packages/tui/test/util/error.test.ts` — Checks TUI error formatting.
 
-Together, these tests cover error recognition, message presentation, and the handling of unrelated errors. They test the main acceptance criteria without depending on a live provider to produce a context-window error.
+**Issue #16 — System notifications:**
+
+- `packages/tui/test/cli/cmd/tui/notifications.test.ts` — Checks that context-overflow session errors produce the exact short notification without exposing provider messages or response bodies. Existing tests also verify that generic session errors and other notification behaviors remain unchanged.
+
+Together, these tests cover error recognition, conversation and notification message presentation, and the handling of unrelated errors. They exercise the relevant error-handling and notification paths directly, providing coverage of the main acceptance criteria without depending on a live provider to produce a context-window error.
 
 ## User Story 3: Tutor Mode in Opencode (Not part of Sprint 1 - extra bonus feature under development) 
 
