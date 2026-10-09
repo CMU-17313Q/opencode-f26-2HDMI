@@ -48,3 +48,19 @@ function hunkRanges(view: ViewDiff): SessionInvolvementLineRange[] {
     )
     .filter((range) => range.end >= range.start)
 }
+
+export function toSessionInvolvementMarkdown(rows: SessionInvolvementRow[]): string {
+  const lines = ["# AI involvement summary", ""]
+  if (rows.length === 0) return [...lines, "No changes in this session.", ""].join("\n")
+  lines.push(`${rows.length} ${rows.length === 1 ? "file" : "files"} changed`, "")
+  for (const row of rows) {
+    const ranges = row.lineRanges.map(formatRange).join(", ")
+    const counts = `+${row.additions} -${row.deletions}`
+    lines.push(`- \`${row.file}\` — ${row.status} (${counts})${ranges ? `: lines ${ranges}` : ""}`)
+  }
+  return [...lines, ""].join("\n")
+}
+
+function formatRange(range: SessionInvolvementLineRange): string {
+  return range.start === range.end ? `${range.start}` : `${range.start}-${range.end}`
+}
