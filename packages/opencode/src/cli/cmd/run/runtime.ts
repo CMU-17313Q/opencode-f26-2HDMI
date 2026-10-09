@@ -14,6 +14,7 @@
 //   4. runs the prompt queue until the footer closes.
 import { createOpencodeClient } from "@opencode-ai/sdk/v2"
 import { Flag } from "@opencode-ai/core/flag/flag"
+import { SessionErrorMessage } from "@opencode-ai/core/session/error-message"
 import { MessageID } from "@/session/schema"
 import { createRunDemo } from "./demo"
 import { resolveModelInfo, resolveRunTuiConfig, resolveSessionInfo } from "./runtime.boot"
@@ -672,6 +673,7 @@ async function runInteractiveRuntime(input: RunRuntimeInput, deps: RunRuntimeDep
 
           const text =
             (await state.stream?.then((item) => item.mod).catch(() => undefined))?.formatUnknownError(error) ??
+            SessionErrorMessage.userFacingErrorMessage(error) ??
             (error instanceof Error ? error.message : String(error))
           const commit = {
             kind: "error",

@@ -1,4 +1,5 @@
 import { describe, expect, test } from "bun:test"
+import { SessionV1 } from "@opencode-ai/core/v1/session"
 import { AccountTransportError } from "../../src/account/schema"
 import { FormatError } from "../../src/cli/error"
 import { UI } from "../../src/cli/ui"
@@ -8,6 +9,17 @@ describe("cli.error", () => {
     expect(FormatError({ name: "ContextOverflowError", data: { message: "raw", responseBody: "private" } })).toBe(
       "Your prompt is too large for this model's context window. Try shortening the conversation or starting a new session, then send the prompt again.",
     )
+  })
+
+  test("formats context overflow error instances without provider details", () => {
+    const formatted = FormatError(
+      new SessionV1.ContextOverflowError({ message: "raw provider error", responseBody: '{"error":"private"}' }),
+    )
+
+    expect(formatted).toBe(
+      "Your prompt is too large for this model's context window. Try shortening the conversation or starting a new session, then send the prompt again.",
+    )
+    expect(formatted).not.toContain("private")
   })
 
   test("formats legacy and tagged config errors the same way", () => {
