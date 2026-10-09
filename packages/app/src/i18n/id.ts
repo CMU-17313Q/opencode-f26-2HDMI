@@ -678,6 +678,10 @@ export const dict = {
   "toast.session.export.failed.description": "Terjadi kesalahan saat mengekspor sesi",
   "toast.session.involvement.download.title": "Involvement summary downloaded",
   "toast.session.involvement.download.description": "Saved summary to {{filename}}",
+  "toast.session.involvement.copy.success.title": "Involvement summary copied",
+  "toast.session.involvement.copy.success.description": "Markdown report copied to clipboard",
+  "toast.session.involvement.copy.failed.title": "Failed to copy involvement summary",
+  "toast.session.involvement.copy.failed.description": "Clipboard access is blocked or unavailable",
 
   "toast.session.listFailed.title": "Gagal memuat sesi untuk {{project}}",
   "toast.project.reloadFailed.title": "Gagal memuat ulang {{project}}",
@@ -771,6 +775,7 @@ export const dict = {
   "session.tab.session": "Sesi",
   "session.tab.review": "Tinjauan",
   "session.involvement.download": "Download involvement summary",
+  "session.involvement.copy": "Copy involvement summary",
   "session.tab.context": "Konteks",
   "session.tab.unknown": "Sesi Tidak Dikenal",
   "session.panel.reviewAndFiles": "Tinjauan dan berkas",
