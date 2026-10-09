@@ -32,7 +32,7 @@ test("copies the involvement summary markdown from the Review panel", async ({ p
   await summary.getByRole("button", { name: "Copy involvement summary" }).click()
 
   await expect(page.getByText("Involvement summary copied", { exact: true })).toBeVisible()
-  expect(await page.evaluate(() => navigator.clipboard.readText())).toBe(
+  expect(await page.evaluate(() => navigator.clipboard.readText()).then((text) => text.replace(/\r\n/g, "\n"))).toBe(
     "# AI involvement summary\n\n1 file changed\n\n- `src/new.ts` — added (+2 -0): lines 1-2\n",
   )
 })
