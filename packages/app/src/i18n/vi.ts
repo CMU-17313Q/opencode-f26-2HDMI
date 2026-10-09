@@ -165,6 +165,7 @@ export const dict = {
   "command.agent.cycle.description": "Chuyển sang tác nhân tiếp theo",
   "command.agent.cycle.reverse": "Chuyển tác nhân theo chiều ngược",
   "command.agent.cycle.reverse.description": "Chuyển sang tác nhân trước đó",
+  "prompt.agent.learn": "Learn (gia sư)",
   "command.model.variant.cycle": "Chuyển mức độ suy luận",
   "command.model.variant.cycle.description": "Chuyển sang mức nỗ lực tiếp theo",
   "command.prompt.mode.shell": "Shell",

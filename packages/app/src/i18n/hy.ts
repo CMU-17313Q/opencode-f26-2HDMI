@@ -160,6 +160,7 @@ export const dict = {
   "command.agent.cycle.description": "Անցնել հաջորդ գործակալին",
   "command.agent.cycle.reverse": "Անցնել նախորդ գործակալին",
   "command.agent.cycle.reverse.description": "Անցնել նախորդ գործակալին",
+  "prompt.agent.learn": "Learn (դաստիարակ)",
   "command.model.variant.cycle": "Փոխել մտածողության ջանքի մակարդակը",
   "command.model.variant.cycle.description": "Անցնել հաջորդ ջանքերի մակարդակին",
   "command.prompt.mode.shell": "Shell",

@@ -159,6 +159,7 @@ export const dict = {
   "command.agent.cycle.description": "Μετάβαση στον επόμενο πράκτορα",
   "command.agent.cycle.reverse": "Μετάβαση στον προηγούμενο πράκτορα",
   "command.agent.cycle.reverse.description": "Εναλλαγή στον προηγούμενο πράκτορα",
+  "prompt.agent.learn": "Learn (δάσκαλος)",
   "command.model.variant.cycle": "Εναλλαγή επιπέδου συλλογιστικής",
   "command.model.variant.cycle.description": "Μετάβαση στο επόμενο επίπεδο προσπάθειας",
   "command.prompt.mode.shell": "Shell",

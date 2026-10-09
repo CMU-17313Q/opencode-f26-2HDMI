@@ -160,6 +160,7 @@ export const dict = {
   "command.agent.cycle.description": "Преминете към следващия агент",
   "command.agent.cycle.reverse": "Предишен агент",
   "command.agent.cycle.reverse.description": "Преминете към предишния агент",
+  "prompt.agent.learn": "Learn (наставник)",
   "command.model.variant.cycle": "Следващо ниво на разсъждение",
   "command.model.variant.cycle.description": "Преминете към следващото ниво на усилие",
   "command.prompt.mode.shell": "Shell",

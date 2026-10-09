@@ -158,6 +158,7 @@ export const dict = {
   "command.agent.cycle.description": "ប្តូរទៅភ្នាក់ងារបន្ទាប់",
   "command.agent.cycle.reverse": "ភ្នាក់ងាររង្វង់ថយក្រោយ",
   "command.agent.cycle.reverse.description": "ប្តូរទៅភ្នាក់ងារមុន។",
+  "prompt.agent.learn": "Learn (គ្រូបង្ហាត់)",
   "command.model.variant.cycle": "ការខិតខំប្រឹងប្រែងគិតជារង្វង់",
   "command.model.variant.cycle.description": "ប្តូរទៅកម្រិតនៃកិច្ចខិតខំប្រឹងប្រែងបន្ទាប់",
   "command.prompt.mode.shell": "សែល",

@@ -158,6 +158,7 @@ export const dict = {
   "command.agent.cycle.description": "Skift til næsta agent",
   "command.agent.cycle.reverse": "Fyrri agentur",
   "command.agent.cycle.reverse.description": "Skift til fyrra agent",
+  "prompt.agent.learn": "Learn (vegleiðari)",
   "command.model.variant.cycle": "Átak í súkkluhugsan",
   "command.model.variant.cycle.description": "Skift til næsta átaksstig",
   "command.prompt.mode.shell": "Shell",

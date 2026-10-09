@@ -159,6 +159,7 @@ export const dict = {
   "command.agent.cycle.description": "Ба агенти навбатӣ гузаред",
   "command.agent.cycle.reverse": "Агенти даврӣ ба ақиб",
   "command.agent.cycle.reverse.description": "Ба агенти қаблӣ гузаред",
+  "prompt.agent.learn": "Learn (мураббӣ)",
   "command.model.variant.cycle": "Кӯшиши фикрронии даврӣ",
   "command.model.variant.cycle.description": "Ба сатҳи навбатии кӯшишҳо гузаред",
   "command.prompt.mode.shell": "Shell",

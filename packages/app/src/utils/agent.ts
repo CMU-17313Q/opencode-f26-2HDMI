@@ -2,6 +2,7 @@ const defaults: Record<string, string> = {
   ask: "var(--icon-agent-ask-base)",
   build: "var(--icon-agent-build-base)",
   docs: "var(--icon-agent-docs-base)",
+  learn: "var(--icon-agent-learn-base)",
   plan: "var(--icon-agent-plan-base)",
 }
 
@@ -29,6 +30,11 @@ function tone(name: string) {
 export function agentColor(name: string, custom?: string) {
   if (custom) return custom
   return defaults[name] ?? defaults[name.toLowerCase()] ?? tone(name.toLowerCase())
+}
+
+export function agentLabel(name: string, t: (key: "prompt.agent.learn") => string) {
+  if (name.toLowerCase() === "learn") return t("prompt.agent.learn")
+  return name
 }
 
 export function messageAgentColor(

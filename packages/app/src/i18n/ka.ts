@@ -158,6 +158,7 @@ export const dict = {
   "command.agent.cycle.description": "გადართვა შემდეგ აგენტზე",
   "command.agent.cycle.reverse": "წინა აგენტზე გადასვლა",
   "command.agent.cycle.reverse.description": "წინა აგენტზე გადასვლა",
+  "prompt.agent.learn": "Learn (რეპეტიტორი)",
   "command.model.variant.cycle": "აზროვნების ძალისხმევის დონის შეცვლა",
   "command.model.variant.cycle.description": "გადართვა ძალისხმევის შემდეგ დონეზე",
   "command.prompt.mode.shell": "Shell",

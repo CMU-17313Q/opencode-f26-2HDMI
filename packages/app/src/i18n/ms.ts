@@ -158,6 +158,7 @@ export const dict = {
   "command.agent.cycle.description": "Tukar ke ejen seterusnya",
   "command.agent.cycle.reverse": "Pusing ejen ke belakang",
   "command.agent.cycle.reverse.description": "Tukar ke ejen sebelumnya",
+  "prompt.agent.learn": "Learn (tutor)",
   "command.model.variant.cycle": "Pusing tahap usaha",
   "command.model.variant.cycle.description": "Tukar ke tahap usaha seterusnya",
   "command.prompt.mode.shell": "Shell",

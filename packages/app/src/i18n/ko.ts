@@ -61,6 +61,7 @@ export const dict = {
   "command.agent.cycle.description": "다음 에이전트로 전환",
   "command.agent.cycle.reverse": "에이전트 역순환",
   "command.agent.cycle.reverse.description": "이전 에이전트로 전환",
+  "prompt.agent.learn": "Learn (튜터)",
   "command.model.variant.cycle": "생각 수준 순환",
   "command.model.variant.cycle.description": "다음 생각 수준으로 전환",
   "command.prompt.mode.shell": "셸",

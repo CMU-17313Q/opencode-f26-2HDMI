@@ -160,6 +160,7 @@ export const dict = {
   "command.agent.cycle.description": "Canvia al següent agent",
   "command.agent.cycle.reverse": "Cicle l'agent cap enrere",
   "command.agent.cycle.reverse.description": "Canvia a l'agent anterior",
+  "prompt.agent.learn": "Learn (tutor)",
   "command.model.variant.cycle": "Esforç de pensar en cicle",
   "command.model.variant.cycle.description": "Canvia al següent nivell d'esforç",
   "command.prompt.mode.shell": "Shell",

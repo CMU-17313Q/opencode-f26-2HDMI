@@ -159,6 +159,7 @@ export const dict = {
   "command.agent.cycle.description": "Byt till nästa agent",
   "command.agent.cycle.reverse": "Växla agent bakåt",
   "command.agent.cycle.reverse.description": "Byt till föregående agent",
+  "prompt.agent.learn": "Learn (handledare)",
   "command.model.variant.cycle": "Växla resonemangsnivå",
   "command.model.variant.cycle.description": "Växla till nästa resonemangsnivå",
   "command.prompt.mode.shell": "Shell",

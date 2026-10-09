@@ -171,6 +171,7 @@ export const dict = {
   "command.agent.cycle.description": "Переключиться к следующему агенту",
   "command.agent.cycle.reverse": "Предыдущий агент",
   "command.agent.cycle.reverse.description": "Переключиться к предыдущему агенту",
+  "prompt.agent.learn": "Learn (наставник)",
   "command.model.variant.cycle": "Переключить уровень усилий",
   "command.model.variant.cycle.description": "Переключиться к следующему уровню усилий",
   "command.prompt.mode.shell": "Оболочка",

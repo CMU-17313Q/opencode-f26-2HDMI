@@ -159,6 +159,7 @@ export const dict = {
   "command.agent.cycle.description": "Префрлете се на следниот агент",
   "command.agent.cycle.reverse": "Циклирајте го агентот наназад",
   "command.agent.cycle.reverse.description": "Префрлете се на претходниот агент",
+  "prompt.agent.learn": "Learn (тутор)",
   "command.model.variant.cycle": "Циклус напор за размислување",
   "command.model.variant.cycle.description": "Префрлете се на следното ниво на напор",
   "command.prompt.mode.shell": "Школка",

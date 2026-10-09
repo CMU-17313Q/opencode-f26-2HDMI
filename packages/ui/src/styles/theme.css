@@ -279,6 +279,7 @@
   --icon-on-interactive-base: #fcfcfc;
   --icon-agent-plan-base: #a753ae;
   --icon-agent-docs-base: #fcb239;
+  --icon-agent-learn-base: #13a35a;
   --icon-agent-ask-base: #2090f5;
   --icon-agent-build-base: #034cff;
   --v2-agent-plan-solid: var(--v2-pink-800);
@@ -292,6 +293,7 @@
   --v2-agent-explore-background: rgba(254, 250, 236, 0.1);
   --v2-agent-review-solid: var(--v2-green-800);
   --v2-agent-writer-solid: var(--v2-purple-700);
+  --v2-agent-learn-solid: var(--v2-cyan-800);
   --icon-on-success-base: rgba(18, 201, 5, 0.9);
   --icon-on-success-hover: rgba(45, 186, 38, 0.9);
   --icon-on-success-selected: rgba(7, 137, 1, 0.9);
@@ -550,6 +552,7 @@
     --icon-on-interactive-base: #ededed;
     --icon-agent-plan-base: #edb2f1;
     --icon-agent-docs-base: #fbb73c;
+    --icon-agent-learn-base: #5fd394;
     --icon-agent-ask-base: #2090f5;
     --icon-agent-build-base: #9dbefe;
     --v2-agent-plan-solid: var(--v2-pink-400);
@@ -563,6 +566,7 @@
     --v2-agent-explore-background: rgba(172, 136, 51, 0.05);
     --v2-agent-review-solid: var(--v2-green-300);
     --v2-agent-writer-solid: var(--v2-purple-400);
+    --v2-agent-learn-solid: var(--v2-cyan-300);
     --icon-on-success-base: rgba(18, 201, 5, 0.9);
     --icon-on-success-hover: rgba(53, 192, 45, 0.9);
     --icon-on-success-selected: rgba(77, 225, 68, 0.9);

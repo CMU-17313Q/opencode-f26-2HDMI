@@ -159,6 +159,7 @@ export const dict: Record<string, string> = {
   "command.agent.cycle.description": "अर्को एजेन्टमा स्विच गर्नुहोस्",
   "command.agent.cycle.reverse": "साइकल एजेन्ट पछाडि",
   "command.agent.cycle.reverse.description": "अघिल्लो एजेन्टमा स्विच गर्नुहोस्",
+  "prompt.agent.learn": "Learn (शिक्षक)",
   "command.model.variant.cycle": "साइकल सोच प्रयास",
   "command.model.variant.cycle.description": "अर्को प्रयास स्तरमा स्विच गर्नुहोस्",
   "command.prompt.mode.shell": "शेल",

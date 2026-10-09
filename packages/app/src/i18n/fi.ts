@@ -65,6 +65,7 @@ export const dict = {
   "command.agent.cycle.description": "Vaihda seuraavaan agenttiin",
   "command.agent.cycle.reverse": "Vaihda agenttia taaksepäin",
   "command.agent.cycle.reverse.description": "Vaihda edelliseen agenttiin",
+  "prompt.agent.learn": "Learn (tutori)",
   "command.model.variant.cycle": "Vaihda päättelyn tasoa",
   "command.model.variant.cycle.description": "Vaihda seuraavalle päättelyn tasolle",
   "command.prompt.mode.shell": "Shell",

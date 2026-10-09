@@ -172,6 +172,7 @@ export const dict = {
   "command.agent.cycle.description": "Beralih ke agen berikutnya",
   "command.agent.cycle.reverse": "Ganti agen mundur",
   "command.agent.cycle.reverse.description": "Beralih ke agen sebelumnya",
+  "prompt.agent.learn": "Learn (tutor)",
   "command.model.variant.cycle": "Ganti usaha berpikir",
   "command.model.variant.cycle.description": "Beralih ke tingkat usaha berikutnya",
   "command.prompt.mode.shell": "Shell",

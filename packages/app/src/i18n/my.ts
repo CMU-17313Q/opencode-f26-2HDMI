@@ -160,6 +160,7 @@ export const dict = {
   "command.agent.cycle.description": "နောက်အေးဂျင့်သို့ ပြောင်းပါ။",
   "command.agent.cycle.reverse": "နောက်ပြန်လှည့်သည့် အေးဂျင့်စက်ဝန်း",
   "command.agent.cycle.reverse.description": "ယခင်အေးဂျင့်သို့ ပြောင်းပါ။",
+  "prompt.agent.learn": "Learn (ကျူရှင်ဆရာ)",
   "command.model.variant.cycle": "သံသရာတွေးတောအားထုတ်မှု",
   "command.model.variant.cycle.description": "နောက်ထပ်ကြိုးစားမှုအဆင့်သို့ ပြောင်းပါ။",
   "command.prompt.mode.shell": "Shell",

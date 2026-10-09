@@ -170,6 +170,7 @@ export const dict = {
   "command.agent.cycle.description": "สลับไปยังเอเจนต์ถัดไป",
   "command.agent.cycle.reverse": "เปลี่ยนเอเจนต์ย้อนกลับ",
   "command.agent.cycle.reverse.description": "สลับไปยังเอเจนต์ก่อนหน้า",
+  "prompt.agent.learn": "Learn (ติวเตอร์)",
   "command.model.variant.cycle": "เปลี่ยนความพยายามในการคิด",
   "command.model.variant.cycle.description": "สลับไปยังระดับความพยายามถัดไป",
   "command.prompt.mode.shell": "เชลล์",

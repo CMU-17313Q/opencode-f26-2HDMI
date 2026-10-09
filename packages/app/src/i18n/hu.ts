@@ -162,6 +162,7 @@ export const dict = {
   "command.agent.cycle.description": "Váltson a következő ügynökre",
   "command.agent.cycle.reverse": "Váltás az előző ügynökre",
   "command.agent.cycle.reverse.description": "Váltás az előző ügynökre",
+  "prompt.agent.learn": "Learn (oktató)",
   "command.model.variant.cycle": "Ciklikus gondolkodási erőfeszítés",
   "command.model.variant.cycle.description": "Váltson a következő erőfeszítési szintre",
   "command.prompt.mode.shell": "Shell",

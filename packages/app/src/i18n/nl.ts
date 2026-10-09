@@ -158,6 +158,7 @@ export const dict = {
   "command.agent.cycle.description": "Schakel over naar de volgende agent",
   "command.agent.cycle.reverse": "Vorige agent",
   "command.agent.cycle.reverse.description": "Schakel over naar de vorige agent",
+  "prompt.agent.learn": "Learn (tutor)",
   "command.model.variant.cycle": "Volgend denkniveau",
   "command.model.variant.cycle.description": "Ga naar het volgende inspanningsniveau",
   "command.prompt.mode.shell": "Shell",

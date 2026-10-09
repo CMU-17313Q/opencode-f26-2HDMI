@@ -164,6 +164,7 @@ export const dict = {
   "command.agent.cycle.description": "اگلے ایجنٹ تے سوئچ کرو",
   "command.agent.cycle.reverse": "پچھلا ایجنٹ ورتو",
   "command.agent.cycle.reverse.description": "پچھلے ایجنٹ تے سوئچ کرو",
+  "prompt.agent.learn": "Learn (ਟਿਊਟਰ)",
   "command.model.variant.cycle": "سوچن دی محنت بدلو",
   "command.model.variant.cycle.description": "محنت دی اگلی سطح تے جاؤ",
   "command.prompt.mode.shell": "Shell",

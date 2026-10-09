@@ -160,6 +160,7 @@ export const dict = {
   "command.agent.cycle.description": "Keyingi agentga o'ting",
   "command.agent.cycle.reverse": "Oldingi agent",
   "command.agent.cycle.reverse.description": "Oldingi agentga o'tish",
+  "prompt.agent.learn": "Learn (repetitor)",
   "command.model.variant.cycle": "Keyingi fikrlash darajasi",
   "command.model.variant.cycle.description": "Keyingi harakat darajasiga o'ting",
   "command.prompt.mode.shell": "Shell",

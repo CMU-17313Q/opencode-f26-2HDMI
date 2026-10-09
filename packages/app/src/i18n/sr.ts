@@ -159,6 +159,7 @@ export const dict = {
   "command.agent.cycle.description": "Пребаците се на следећег агента",
   "command.agent.cycle.reverse": "Претходни агент",
   "command.agent.cycle.reverse.description": "Пребаците се на претходног агента",
+  "prompt.agent.learn": "Learn (ментор)",
   "command.model.variant.cycle": "Следећи ниво размишљања",
   "command.model.variant.cycle.description": "Пребаците се на следећи ниво напора",
   "command.prompt.mode.shell": "Shell",

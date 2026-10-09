@@ -159,6 +159,7 @@ export const dict = {
   "command.agent.cycle.description": "به عامل بعدی بروید",
   "command.agent.cycle.reverse": "چرخه عامل به عقب",
   "command.agent.cycle.reverse.description": "به عامل قبلی بروید",
+  "prompt.agent.learn": "Learn (مربی)",
   "command.model.variant.cycle": "چرخه تلاش برای تفکر",
   "command.model.variant.cycle.description": "به سطح تلاش بعدی بروید",
   "command.prompt.mode.shell": "پوسته",

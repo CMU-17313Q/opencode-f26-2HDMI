@@ -159,6 +159,7 @@ export const dict = {
   "command.agent.cycle.description": "Indiki agente geçiň",
   "command.agent.cycle.reverse": "Öňki agent",
   "command.agent.cycle.reverse.description": "Öňki agente geçiň",
+  "prompt.agent.learn": "Learn (mugallym)",
   "command.model.variant.cycle": "Indiki pikirleniş derejesi",
   "command.model.variant.cycle.description": "Indiki synanyşyk derejesine geçiň",
   "command.prompt.mode.shell": "Shell",

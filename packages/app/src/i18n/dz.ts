@@ -161,6 +161,7 @@ export const dict: Record<string, string> = {
   "command.agent.cycle.description": "ཤུལ་མམ་གྱི་ལས་ཚབ་ལུ་སོར་བསྒྱུར་འབད།",
   "command.agent.cycle.reverse": "རྐང་འཁོར་ལས་ཚབ་རྒྱབ་ལུ་བསྒྱུར།",
   "command.agent.cycle.reverse.description": "ཧེ་མའི་ལས་ཚབ་ལུ་སོར་བསྒྱུར་འབད།",
+  "prompt.agent.learn": "Learn (སློབ་དཔོན)",
   "command.model.variant.cycle": "འཁོར་སྐྱོད་བསམ་བློའི་འབད་བརྩོན།",
   "command.model.variant.cycle.description": "འབད་བརྩོན་གནས་རིམ་ཤུལ་མམ་ལུ་སོར་བསྒྱུར་འབད།",
   "command.prompt.mode.shell": "Shell",

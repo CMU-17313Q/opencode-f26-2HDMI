@@ -162,6 +162,7 @@ export const dict = {
   "command.agent.cycle.description": "Perjunkite į kitą agentą",
   "command.agent.cycle.reverse": "Perjungti į ankstesnį agentą",
   "command.agent.cycle.reverse.description": "Perjungti į ankstesnį agentą",
+  "prompt.agent.learn": "Learn (korepetitorius)",
   "command.model.variant.cycle": "Perkelkite mąstymo pastangas",
   "command.model.variant.cycle.description": "Perjunkite į kitą pastangų lygį",
   "command.prompt.mode.shell": "Apvalkalas",
