@@ -172,8 +172,12 @@ export const Plugin = define({
         item.description = "Learn mode. Tutors with questions and hints instead of implementing the solution."
         item.system = PROMPT_LEARN
         item.mode = "primary"
+        // Read/search only, like plan, but without plan's .opencode/plans/*.md write exception.
         item.permissions.push(
-          ...PermissionV2.merge(defaults, [{ action: "question", resource: "*", effect: "allow" }]),
+          ...PermissionV2.merge(defaults, [
+            { action: "question", resource: "*", effect: "allow" },
+            { action: "edit", resource: "*", effect: "deny" },
+          ]),
         )
       })
 
