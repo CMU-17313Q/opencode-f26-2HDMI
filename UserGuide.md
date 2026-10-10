@@ -55,7 +55,7 @@ If the browser blocks clipboard access (for example, the page is opened over pla
 - **`packages/app/src/i18n/parity.test.ts`** (existing): fails if any of the 62 locale files is missing one of the new copy strings, so the button label and toasts can never show a missing key.
 - The Markdown format itself is covered by the existing `session involvement markdown` tests in `packages/session-ui/src/components/session-involvement.test.ts`, added with the Download feature.
 
-Why this is enough: the feature has three parts, and each one is tested at the level where it can break. The clipboard helper is tested directly for success and both failure modes. The full user path (button on the Review panel, real clipboard, toast) is tested end to end in a real browser, for both success and failure. The shared Markdown formatter and the translation keys already have their own tests. Together they cover the acceptance criteria for #8: the button shows on the Review summary, clicking it copies the Markdown report, empty summaries still copy a valid report, and the user gets success or error feedback.
+The feature has three parts, and each one is tested at the level where it can break. The clipboard helper is tested directly for success and both failure modes. The full user path (button on the Review panel, real clipboard, toast) is tested end to end in a real browser, for both success and failure. The shared Markdown formatter and the translation keys already have their own tests. Together they cover the acceptance criteria for #8: the button shows on the Review summary, clicking it copies the Markdown report, empty summaries still copy a valid report, and the user gets success or error feedback.
 
 ---
 
