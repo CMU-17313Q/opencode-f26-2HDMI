@@ -70,6 +70,30 @@ bun run ./src/index.ts session involvement <sessionID>
 - **`packages/opencode/test/cli/help/__snapshots__/help-snapshots.test.ts.snap`** — `opencode session --help` includes `involvement`.
 
 These tests run the real helper, not a mock. Each Issue #4 acceptance criterion has a case in `involvement.test.ts`. Issue #5’s empty-report and help criteria are covered by `formatReport` and the help snapshot. The missing-session path matches `session delete` and was checked by running `opencode session involvement ses_does_not_exist`. A live session with diffs is the user-test path above; the parser tests use the same patch shapes that `SessionSummary.diff()` already stores.
+### Involvement Summary in the Review Panel (Issue #7)
+
+Issue: [#7](https://github.com/CMU-17313Q/opencode-f26-2HDMI/issues/7), PR [#18](https://github.com/CMU-17313Q/opencode-f26-2HDMI/pull/18)
+
+#### Overview
+
+At the top of a session's **Review** tab, a **Session changes** box lists every file the session modified, so you can see the scope of AI involvement without opening each diff. Each row shows the file path, its status (Added, Removed or Modified), its line ranges, and its +/- counts. The box also shows the totals ("N Changed files"). A session with no edits shows "No file changes yet" instead of an error. The list stops at a fixed height and scrolls, so a long session doesn't push the diff viewer down.
+
+#### User Testing
+
+1. Run the desktop app, open a session where OpenCode edited files, and open the **Review** tab.
+2. Check the **Session changes** box at the top: each changed file is listed with its status, line ranges and +/- counts.
+3. Compare the totals with the diffs shown below the box. They should match.
+4. Open a session with no changes. The box shows "No file changes yet" and no error.
+5. Open a session with many changed files. The list scrolls inside the box.
+
+#### Automated Tests
+
+- **`packages/session-ui/src/components/session-involvement.test.ts`** tests the mapper that builds the rows: an empty diff list, a multi-hunk patch giving one range per hunk, new and deleted files, a missing status, a file emptied without being deleted, and a diff with no patch.
+- **`packages/session-ui/src/components/session-involvement-summary.stories.tsx`** is a Storybook story with "with changes" and "empty" states, which I used to check the display for both acceptance cases.
+- **`packages/app/e2e/user-story/involvement-copy.spec.ts`** (Playwright) opens a mocked session and checks that the Review panel summary lists the changed file.
+
+The summary component only displays what the mapper returns, and the totals use the same diffs the Review tab shows. So the mapper tests cover the numbers and ranges, the Storybook states cover the display, and the Playwright test covers the box in a real page. There is no automated render test of the component on its own; its rendering was checked by hand in Storybook.
+
 
 ### Copy Involvement Summary to Clipboard (Issue #8)
 
@@ -195,7 +219,7 @@ In the terminal UI, the message appears in the red error panel under the assista
 
 ### Developer Testing Notes
 
-The context-overflow feature was implemented across several issues, covering error recognition (issue 11), user-facing guidance (issue 12), and system notifications (issue 16). The relevant automated tests are listed below.
+The context-overflow feature was implemented across several issues, covering error recognition (issue 11), user-facing guidance (issue 12), the interactive CLI (issue 13), the conversation view in the terminal UI (issue 15) and system notifications (issue 16). The relevant automated tests are listed below.
 
 **Issue #11 — Error recognition:**
 - `packages/llm/test/provider-error.test.ts` — Checks that context-window errors are recognized without confusing them with unrelated provider errors.
@@ -208,6 +232,14 @@ The context-overflow feature was implemented across several issues, covering err
 - `packages/opencode/test/cli/run/session-data.test.ts` — Checks CLI session-data handling.
 - `packages/opencode/test/cli/run/stream.transport.test.ts` — Checks CLI streaming error handling.
 - `packages/tui/test/util/error.test.ts` — Checks TUI error formatting.
+
+**Issue #13 — Interactive CLI:**
+- `packages/opencode/test/cli/run/runtime.test.ts` — Runs the interactive runtime: the first prompt fails with a context overflow, only the guidance message is shown (no response body or token counts), and a second prompt still runs.
+- `packages/opencode/test/cli/error.test.ts`, `packages/opencode/test/cli/run/stream.transport.test.ts` and `packages/opencode/test/cli/run/session-data.test.ts` — Add real `ContextOverflowError` instances, an overflow payload without `data.message`, and a check that generic errors keep their own messages.
+
+To check it by hand: start the interactive CLI with `opencode run --interactive`, choose a model with a small context window, and send a prompt well over its limit. The terminal should show the actionable message, with no provider text or JSON. Then send a short prompt to confirm the session still accepts input.
+
+Each Issue #13 acceptance criterion maps to one of these tests. They use the real formatters and runtime with no mocks, and the payload test fails without the `session-data.ts` fix (it printed "ContextOverflowError"), so it catches the bug it was written for.
 
 **Issue #15 — TUI conversation view:**
 - `packages/tui/test/cli/tui/assistant-message-error.test.tsx` — Renders the real error panel used by the conversation view. Checks that a context-overflow error shows the actionable message, that the raw provider message and response body never appear on screen, that an overflow error with an empty provider message still renders without crashing, that generic errors keep their own message, that aborted messages and messages without an error show no panel, and that at 40 columns the message wraps without splitting words.
@@ -237,6 +269,7 @@ In the desktop app, the agent switcher in the composer lists Learn as **Learn (t
 ### Automated tests
 - **`packages/app/src/utils/agent.test.ts`** checks that `agentLabel` labels Learn as a tutor and leaves other agents unchanged, and that `agentColor` gives Learn its own color for any letter case.
 - **`packages/app/src/i18n/parity.test.ts`** checks the new label exists in every locale.
+
 These cover the new logic. Listing and switching agents reuse unchanged code
 
 ### Learn Mode Is Read-Only (Issue #29)
