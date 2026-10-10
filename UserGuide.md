@@ -6,7 +6,70 @@ This guide provides instructions for using and testing the features developed by
 
 This feature allows users to review the scope of AI involvement in a coding session, including the files and line ranges modified by OpenCode.
 
-*Feature usage and user-testing instructions will be added by the responsible team members.*
+A grader can print that summary from the terminal (`opencode session involvement`). The Review panel Copy and Download buttons use the same file + line-range idea.
+
+### CLI involvement report (Issues #4 and #5)
+
+Issues: [#4](https://github.com/CMU-17313Q/opencode-f26-2HDMI/issues/4), [#5](https://github.com/CMU-17313Q/opencode-f26-2HDMI/issues/5). PRs: [#14](https://github.com/CMU-17313Q/opencode-f26-2HDMI/pull/14), [#24](https://github.com/CMU-17313Q/opencode-f26-2HDMI/pull/24).
+
+#### What it does
+
+`opencode session involvement <sessionID>` prints a short text report of every file OpenCode changed in that session, with status, +/- counts, and line ranges from the patch hunks.
+
+Example:
+
+```text
+AI involvement — session ses_xxx
+3 files, +42 / -18
+
+- packages/app/src/foo.ts (modified)  lines 12–40, 88–95
+- packages/app/src/bar.ts (added)  lines 1–60
+- README.md (deleted)
+```
+
+A missing session ID fails the same way as `opencode session delete` (`Session not found: …`). A session with no diffs still prints the header (`0 files, +0 / -0`) and does not crash.
+
+The parser (`SessionInvolvement.fromDiffs`) is a pure helper. It does not talk to the network. It turns existing session diffs into `{ file, status, additions, deletions, ranges }`. Line ranges come from `@@` hunk headers. Added files use the new-file range; deleted files use the old-file range. A missing or unreadable patch does not throw.
+
+#### How to use it
+
+1. From `packages/opencode`, run OpenCode against a project where you already have a session that edited files.
+2. Copy the session ID (from `opencode session list`, or from the app URL / session header).
+3. Run:
+
+```bash
+export PATH="$HOME/.bun/bin:$PATH"
+cd packages/opencode
+bun run ./src/index.ts session involvement <sessionID>
+```
+
+4. Read the report. Each line is one file. `lines a–b` is the hunk range, not a guarantee that every line in that span was written by the model.
+
+`opencode session --help` lists `involvement` next to `list` and `delete`.
+
+#### User testing
+
+1. Start a session and ask OpenCode to add or edit a file (for example, create `hello.ts`).
+2. Run `opencode session list` and copy that session’s ID.
+3. Run `opencode session involvement <sessionID>`. Expected: the new file appears as `added` with a line range, and the `+ / -` totals match the change.
+4. Edit the same file again in that session, then rerun the command. Expected: the file is still listed (status `modified` if it already existed).
+5. Run `opencode session involvement ses_does_not_exist`. Expected: `Session not found: ses_does_not_exist` and a non-zero exit. Same wording style as `opencode session delete ses_does_not_exist`.
+6. Run `opencode session --help`. Expected: a line for `opencode session involvement <sessionID>`.
+
+#### Automated tests
+
+- **`packages/opencode/test/session/involvement.test.ts`** — parser and report text.
+  - Empty list → no rows.
+  - One-hunk modified file → one range from the hunk header.
+  - Two-hunk modified file → both ranges.
+  - Added file (`--- /dev/null`) → new-file range.
+  - Deleted file (`+++ /dev/null`) → old-file range.
+  - Missing `patch` → no throw, empty `ranges`.
+  - `formatReport` prints the header, file lines, and `+ / -` totals.
+  - Empty session → `0 files, +0 / -0` and no crash.
+- **`packages/opencode/test/cli/help/__snapshots__/help-snapshots.test.ts.snap`** — `opencode session --help` includes `involvement`.
+
+These tests run the real helper, not a mock. Each Issue #4 acceptance criterion has a case in `involvement.test.ts`. Issue #5’s empty-report and help criteria are covered by `formatReport` and the help snapshot. The missing-session path matches `session delete` and was checked by running `opencode session involvement ses_does_not_exist`. A live session with diffs is the user-test path above; the parser tests use the same patch shapes that `SessionSummary.diff()` already stores.
 
 ### Copy Involvement Summary to Clipboard (Issue #8)
 
