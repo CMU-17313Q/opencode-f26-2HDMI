@@ -6,6 +6,7 @@ Summary of the files and line ranges modified during a session, shown at the top
 
 ### API
 - \`diffs\`: the same review diffs rendered by the Review panel.
+- \`onCopy\` / \`copyLabel\`: optional. When set, shows a Copy button that passes the markdown report to \`onCopy\`.
 
 ### Variants and states
 - Rows with path, status, line ranges, and additions/deletions.
@@ -65,6 +66,14 @@ export const Empty = {
   render: () => (
     <div style={{ width: "480px" }}>
       <SessionInvolvementSummary diffs={[]} />
+    </div>
+  ),
+}
+
+export const WithCopy = {
+  render: () => (
+    <div style={{ width: "480px" }}>
+      <SessionInvolvementSummary diffs={diffs} copyLabel="Copy involvement summary" onCopy={() => {}} />
     </div>
   ),
 }

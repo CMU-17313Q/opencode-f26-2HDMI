@@ -632,6 +632,10 @@ export const dict = {
   "toast.session.export.failed.description": "सेशन निर्यात करते समय एक त्रुटि हुई",
   "toast.session.involvement.download.title": "Involvement summary downloaded",
   "toast.session.involvement.download.description": "Saved summary to {{filename}}",
+  "toast.session.involvement.copy.success.title": "Involvement summary copied",
+  "toast.session.involvement.copy.success.description": "Markdown report copied to clipboard",
+  "toast.session.involvement.copy.failed.title": "Failed to copy involvement summary",
+  "toast.session.involvement.copy.failed.description": "Clipboard access is blocked or unavailable",
 
   "toast.session.listFailed.title": "{{project}} के लिए सेशन लोड करने में विफल",
   "toast.project.reloadFailed.title": "{{project}} को पुनः लोड करने में विफल",
@@ -716,6 +720,7 @@ export const dict = {
   "session.tab.session": "सेशन",
   "session.tab.review": "समीक्षा",
   "session.involvement.download": "Download involvement summary",
+  "session.involvement.copy": "Copy involvement summary",
   "session.tab.context": "कॉन्टेक्स्ट",
   "session.tab.unknown": "अज्ञात सेशन",
   "session.panel.reviewAndFiles": "समीक्षा और फ़ाइलें",

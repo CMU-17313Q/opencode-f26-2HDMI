@@ -672,6 +672,10 @@ export const dict = {
   "toast.session.export.failed.description": "Oturum dışa aktarılırken bir hata oluştu",
   "toast.session.involvement.download.title": "Involvement summary downloaded",
   "toast.session.involvement.download.description": "Saved summary to {{filename}}",
+  "toast.session.involvement.copy.success.title": "Involvement summary copied",
+  "toast.session.involvement.copy.success.description": "Markdown report copied to clipboard",
+  "toast.session.involvement.copy.failed.title": "Failed to copy involvement summary",
+  "toast.session.involvement.copy.failed.description": "Clipboard access is blocked or unavailable",
 
   "toast.session.listFailed.title": "{{project}} için oturumlar yüklenemedi",
 
@@ -757,6 +761,7 @@ export const dict = {
   "session.tab.session": "Oturum",
   "session.tab.review": "İnceleme",
   "session.involvement.download": "Download involvement summary",
+  "session.involvement.copy": "Copy involvement summary",
   "session.tab.context": "Bağlam",
   "session.tab.unknown": "Bilinmeyen Oturum",
   "session.panel.reviewAndFiles": "İnceleme ve dosyalar",

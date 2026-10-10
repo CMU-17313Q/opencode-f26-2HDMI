@@ -57,6 +57,7 @@ import {
 import { setSessionHandoff } from "@/pages/session/handoff"
 import { useSessionLayout } from "@/pages/session/session-layout"
 import { downloadInvolvementMarkdown } from "@/utils/session-export"
+import { copyInvolvementMarkdown } from "@/utils/involvement-clipboard"
 import { showToast } from "@/utils/toast"
 import { SessionFileBrowserTab, type SessionFileBrowserState } from "@/pages/session/v2/session-file-browser-tab"
 
@@ -102,6 +103,23 @@ export function SessionSidePanel(props: {
       icon: "circle-check",
       title: language.t("toast.session.involvement.download.title"),
       description: language.t("toast.session.involvement.download.description", { filename }),
+    })
+  }
+
+  const copyInvolvement = async (markdown: string) => {
+    if (!(await copyInvolvementMarkdown(markdown))) {
+      showToast({
+        variant: "error",
+        title: language.t("toast.session.involvement.copy.failed.title"),
+        description: language.t("toast.session.involvement.copy.failed.description"),
+      })
+      return
+    }
+    showToast({
+      variant: "success",
+      icon: "circle-check",
+      title: language.t("toast.session.involvement.copy.success.title"),
+      description: language.t("toast.session.involvement.copy.success.description"),
     })
   }
   const projectDirectory = createMemo(() => sdk().directory)
@@ -492,6 +510,8 @@ export function SessionSidePanel(props: {
                                   diffs={diffs()}
                                   downloadLabel={language.t("session.involvement.download")}
                                   onDownload={downloadInvolvement}
+                                  copyLabel={language.t("session.involvement.copy")}
+                                  onCopy={copyInvolvement}
                                 />
                               </Show>
                               {props.reviewPanel()}
@@ -727,6 +747,8 @@ export function SessionSidePanel(props: {
                                 diffs={diffs()}
                                 downloadLabel={language.t("session.involvement.download")}
                                 onDownload={downloadInvolvement}
+                                copyLabel={language.t("session.involvement.copy")}
+                                onCopy={copyInvolvement}
                               />
                             </Show>
                             {props.reviewPanel()}

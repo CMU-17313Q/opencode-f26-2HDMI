@@ -624,6 +624,10 @@ export const dict = {
   "toast.session.export.failed.description": "Wystąpił błąd podczas eksportowania sesji",
   "toast.session.involvement.download.title": "Involvement summary downloaded",
   "toast.session.involvement.download.description": "Saved summary to {{filename}}",
+  "toast.session.involvement.copy.success.title": "Involvement summary copied",
+  "toast.session.involvement.copy.success.description": "Markdown report copied to clipboard",
+  "toast.session.involvement.copy.failed.title": "Failed to copy involvement summary",
+  "toast.session.involvement.copy.failed.description": "Clipboard access is blocked or unavailable",
 
   "toast.session.listFailed.title": "Nie udało się załadować sesji dla {{project}}",
   "toast.update.title": "Dostępna aktualizacja",
@@ -700,6 +704,7 @@ export const dict = {
   "session.tab.session": "Sesja",
   "session.tab.review": "Przegląd",
   "session.involvement.download": "Download involvement summary",
+  "session.involvement.copy": "Copy involvement summary",
   "session.tab.context": "Kontekst",
   "session.tab.unknown": "Nieznana sesja",
   "session.panel.reviewAndFiles": "Przegląd i pliki",
