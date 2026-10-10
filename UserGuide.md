@@ -120,6 +120,23 @@ If the browser blocks clipboard access (for example, the page is opened over pla
 
 The feature has three parts, and each one is tested at the level where it can break. The clipboard helper is tested directly for success and both failure modes. The full user path (button on the Review panel, real clipboard, toast) is tested end to end in a real browser, for both success and failure. The shared Markdown formatter and the translation keys already have their own tests. Together they cover the acceptance criteria for #8: the button shows on the Review summary, clicking it copies the Markdown report, empty summaries still copy a valid report, and the user gets success or error feedback.
 
+### Download the Involvement Summary (Issue #9)
+
+#### Overview
+The summary at the top of the Review panel has a download button. It saves `involvement-<sessionID>.md` with the same files, statuses, +/- counts, and line ranges shown on screen, and shows a toast with the filename.
+
+#### User Testing
+1. Run the desktop app, open a session where the agent edited files, and open the Review panel.
+2. Click the download icon next to the summary totals.
+3. Open the saved `involvement-<sessionID>.md` and check it lists the same files and line ranges as the panel.
+4. Repeat on a session with no changes. The file still downloads and says "No changes in this session."
+
+#### Automated Tests
+- **`packages/session-ui/src/components/session-involvement.test.ts`** checks the exact markdown for an empty summary and for files with status, counts, and single and multi-line ranges.
+- **`packages/app/src/utils/session-export.test.ts`** checks the existing session export still works after both downloads were moved onto one shared helper.
+
+The file contents come from one tested function. The button only passes it the rows already on screen.
+
 ---
 
 ## User Story 2: Actionable Context-Overflow Errors
