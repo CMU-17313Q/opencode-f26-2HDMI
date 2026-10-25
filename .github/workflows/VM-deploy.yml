@@ -1,0 +1,32 @@
+name: VM Deploy OpenCode
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: true
+
+jobs:
+  build-and-deploy:
+    # The VM is only reachable from the CMU Qatar network, so the job runs on a
+    # self-hosted runner installed on the VM itself.
+    runs-on: self-hosted
+
+    steps:
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.2.1
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          username: ${{ secrets.SERVER_ADMIN }}
+          password: ${{ secrets.ADMIN_PASSWORD }}
+          script: |
+            cd ~/${{ secrets.REPO_NAME }}
+            git fetch origin main
+            git checkout main
+            git pull origin main
+            docker compose down
+            docker compose up -d --build
