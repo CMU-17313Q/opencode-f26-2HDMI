@@ -1531,21 +1531,12 @@ function AssistantMessage(props: { message: AssistantMessage; parts: Part[]; las
           </text>
         </box>
       </Show>
-      <Show when={props.message.error && props.message.error.name !== "MessageAbortedError"}>
-        <box
-          ref={(el: BoxRenderable) => alwaysSeparate.add(el)}
-          border={["left"]}
-          paddingTop={1}
-          paddingBottom={1}
-          paddingLeft={2}
-          marginTop={1}
-          backgroundColor={theme.backgroundPanel}
-          customBorderChars={SplitBorder.customBorderChars}
-          borderColor={theme.error}
-        >
-          <text fg={theme.textMuted}>{errorMessage(props.message.error)}</text>
-        </box>
-      </Show>
+      <AssistantMessageError
+        error={props.message.error}
+        color={theme.textMuted}
+        backgroundColor={theme.backgroundPanel}
+        borderColor={theme.error}
+      />
       <Switch>
         <Match when={props.last || final() || props.message.error?.name === "MessageAbortedError"}>
           <box ref={(el: BoxRenderable) => alwaysSeparate.add(el)} paddingLeft={3}>
@@ -1916,6 +1907,35 @@ function InlineTool(props: {
     >
       {props.children}
     </InlineToolRow>
+  )
+}
+
+// errorMessage() swaps ContextOverflowError for shared guidance so raw provider
+// messages and response bodies never reach the conversation view.
+export function AssistantMessageError(props: {
+  error: AssistantMessage["error"]
+  color?: RGBA
+  backgroundColor?: RGBA
+  borderColor?: RGBA
+}) {
+  return (
+    <Show when={props.error && props.error.name !== "MessageAbortedError"}>
+      <box
+        ref={(el: BoxRenderable) => alwaysSeparate.add(el)}
+        border={["left"]}
+        paddingTop={1}
+        paddingBottom={1}
+        paddingLeft={2}
+        marginTop={1}
+        backgroundColor={props.backgroundColor}
+        customBorderChars={SplitBorder.customBorderChars}
+        borderColor={props.borderColor}
+      >
+        <text fg={props.color} wrapMode="word">
+          {errorMessage(props.error)}
+        </text>
+      </box>
+    </Show>
   )
 }
 

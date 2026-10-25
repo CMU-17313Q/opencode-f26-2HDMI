@@ -6,7 +6,94 @@ This guide provides instructions for using and testing the features developed by
 
 This feature allows users to review the scope of AI involvement in a coding session, including the files and line ranges modified by OpenCode.
 
-*Feature usage and user-testing instructions will be added by the responsible team members.*
+A grader can print that summary from the terminal (`opencode session involvement`). The Review panel Copy and Download buttons use the same file + line-range idea.
+
+### CLI involvement report (Issues #4 and #5)
+
+Issues: [#4](https://github.com/CMU-17313Q/opencode-f26-2HDMI/issues/4), [#5](https://github.com/CMU-17313Q/opencode-f26-2HDMI/issues/5). PRs: [#14](https://github.com/CMU-17313Q/opencode-f26-2HDMI/pull/14), [#24](https://github.com/CMU-17313Q/opencode-f26-2HDMI/pull/24).
+
+#### What it does
+
+`opencode session involvement <sessionID>` prints a short text report of every file OpenCode changed in that session, with status, +/- counts, and line ranges from the patch hunks.
+
+Example:
+
+```text
+AI involvement — session ses_xxx
+3 files, +42 / -18
+
+- packages/app/src/foo.ts (modified)  lines 12–40, 88–95
+- packages/app/src/bar.ts (added)  lines 1–60
+- README.md (deleted)
+```
+
+A missing session ID fails the same way as `opencode session delete` (`Session not found: …`). A session with no diffs still prints the header (`0 files, +0 / -0`) and does not crash.
+
+The parser (`SessionInvolvement.fromDiffs`) is a pure helper. It does not talk to the network. It turns existing session diffs into `{ file, status, additions, deletions, ranges }`. Line ranges come from `@@` hunk headers. Added files use the new-file range; deleted files use the old-file range. A missing or unreadable patch does not throw.
+
+#### How to use it
+
+1. From `packages/opencode`, run OpenCode against a project where you already have a session that edited files.
+2. Copy the session ID (from `opencode session list`, or from the app URL / session header).
+3. Run:
+
+```bash
+export PATH="$HOME/.bun/bin:$PATH"
+cd packages/opencode
+bun run ./src/index.ts session involvement <sessionID>
+```
+
+4. Read the report. Each line is one file. `lines a–b` is the hunk range, not a guarantee that every line in that span was written by the model.
+
+`opencode session --help` lists `involvement` next to `list` and `delete`.
+
+#### User testing
+
+1. Start a session and ask OpenCode to add or edit a file (for example, create `hello.ts`).
+2. Run `opencode session list` and copy that session’s ID.
+3. Run `opencode session involvement <sessionID>`. Expected: the new file appears as `added` with a line range, and the `+ / -` totals match the change.
+4. Edit the same file again in that session, then rerun the command. Expected: the file is still listed (status `modified` if it already existed).
+5. Run `opencode session involvement ses_does_not_exist`. Expected: `Session not found: ses_does_not_exist` and a non-zero exit. Same wording style as `opencode session delete ses_does_not_exist`.
+6. Run `opencode session --help`. Expected: a line for `opencode session involvement <sessionID>`.
+
+#### Automated tests
+
+- **`packages/opencode/test/session/involvement.test.ts`** — parser and report text.
+  - Empty list → no rows.
+  - One-hunk modified file → one range from the hunk header.
+  - Two-hunk modified file → both ranges.
+  - Added file (`--- /dev/null`) → new-file range.
+  - Deleted file (`+++ /dev/null`) → old-file range.
+  - Missing `patch` → no throw, empty `ranges`.
+  - `formatReport` prints the header, file lines, and `+ / -` totals.
+  - Empty session → `0 files, +0 / -0` and no crash.
+- **`packages/opencode/test/cli/help/__snapshots__/help-snapshots.test.ts.snap`** — `opencode session --help` includes `involvement`.
+
+These tests run the real helper, not a mock. Each Issue #4 acceptance criterion has a case in `involvement.test.ts`. Issue #5’s empty-report and help criteria are covered by `formatReport` and the help snapshot. The missing-session path matches `session delete` and was checked by running `opencode session involvement ses_does_not_exist`. A live session with diffs is the user-test path above; the parser tests use the same patch shapes that `SessionSummary.diff()` already stores.
+### Involvement Summary in the Review Panel (Issue #7)
+
+Issue: [#7](https://github.com/CMU-17313Q/opencode-f26-2HDMI/issues/7), PR [#18](https://github.com/CMU-17313Q/opencode-f26-2HDMI/pull/18)
+
+#### Overview
+
+At the top of a session's **Review** tab, a **Session changes** box lists every file the session modified, so you can see the scope of AI involvement without opening each diff. Each row shows the file path, its status (Added, Removed or Modified), its line ranges, and its +/- counts. The box also shows the totals ("N Changed files"). A session with no edits shows "No file changes yet" instead of an error. The list stops at a fixed height and scrolls, so a long session doesn't push the diff viewer down.
+
+#### User Testing
+
+1. Run the desktop app, open a session where OpenCode edited files, and open the **Review** tab.
+2. Check the **Session changes** box at the top: each changed file is listed with its status, line ranges and +/- counts.
+3. Compare the totals with the diffs shown below the box. They should match.
+4. Open a session with no changes. The box shows "No file changes yet" and no error.
+5. Open a session with many changed files. The list scrolls inside the box.
+
+#### Automated Tests
+
+- **`packages/session-ui/src/components/session-involvement.test.ts`** tests the mapper that builds the rows: an empty diff list, a multi-hunk patch giving one range per hunk, new and deleted files, a missing status, a file emptied without being deleted, and a diff with no patch.
+- **`packages/session-ui/src/components/session-involvement-summary.stories.tsx`** is a Storybook story with "with changes" and "empty" states, which I used to check the display for both acceptance cases.
+- **`packages/app/e2e/user-story/involvement-copy.spec.ts`** (Playwright) opens a mocked session and checks that the Review panel summary lists the changed file.
+
+The summary component only displays what the mapper returns, and the totals use the same diffs the Review tab shows. So the mapper tests cover the numbers and ranges, the Storybook states cover the display, and the Playwright test covers the box in a real page. There is no automated render test of the component on its own; its rendering was checked by hand in Storybook.
+
 
 ### Copy Involvement Summary to Clipboard (Issue #8)
 
@@ -56,6 +143,23 @@ If the browser blocks clipboard access (for example, the page is opened over pla
 - The Markdown format itself is covered by the existing `session involvement markdown` tests in `packages/session-ui/src/components/session-involvement.test.ts`, added with the Download feature.
 
 The feature has three parts, and each one is tested at the level where it can break. The clipboard helper is tested directly for success and both failure modes. The full user path (button on the Review panel, real clipboard, toast) is tested end to end in a real browser, for both success and failure. The shared Markdown formatter and the translation keys already have their own tests. Together they cover the acceptance criteria for #8: the button shows on the Review summary, clicking it copies the Markdown report, empty summaries still copy a valid report, and the user gets success or error feedback.
+
+### Download the Involvement Summary (Issue #9)
+
+#### Overview
+The summary at the top of the Review panel has a download button. It saves `involvement-<sessionID>.md` with the same files, statuses, +/- counts, and line ranges shown on screen, and shows a toast with the filename.
+
+#### User Testing
+1. Run the desktop app, open a session where the agent edited files, and open the Review panel.
+2. Click the download icon next to the summary totals.
+3. Open the saved `involvement-<sessionID>.md` and check it lists the same files and line ranges as the panel.
+4. Repeat on a session with no changes. The file still downloads and says "No changes in this session."
+
+#### Automated Tests
+- **`packages/session-ui/src/components/session-involvement.test.ts`** checks the exact markdown for an empty summary and for files with status, counts, and single and multi-line ranges.
+- **`packages/app/src/utils/session-export.test.ts`** checks the existing session export still works after both downloads were moved onto one shared helper.
+
+The file contents come from one tested function. The button only passes it the rows already on screen.
 
 ---
 
@@ -115,7 +219,7 @@ In the terminal UI, the message appears in the red error panel under the assista
 
 ### Developer Testing Notes
 
-The context-overflow feature was implemented across several issues, covering error recognition (issue 11), user-facing guidance (issue 12), and system notifications (issue 16). The relevant automated tests are listed below.
+The context-overflow feature was implemented across several issues, covering error recognition (issue 11), user-facing guidance (issue 12), the interactive CLI (issue 13), the conversation view in the terminal UI (issue 15) and system notifications (issue 16). The relevant automated tests are listed below.
 
 **Issue #11 — Error recognition:**
 - `packages/llm/test/provider-error.test.ts` — Checks that context-window errors are recognized without confusing them with unrelated provider errors.
@@ -128,6 +232,14 @@ The context-overflow feature was implemented across several issues, covering err
 - `packages/opencode/test/cli/run/session-data.test.ts` — Checks CLI session-data handling.
 - `packages/opencode/test/cli/run/stream.transport.test.ts` — Checks CLI streaming error handling.
 - `packages/tui/test/util/error.test.ts` — Checks TUI error formatting.
+
+**Issue #13 — Interactive CLI:**
+- `packages/opencode/test/cli/run/runtime.test.ts` — Runs the interactive runtime: the first prompt fails with a context overflow, only the guidance message is shown (no response body or token counts), and a second prompt still runs.
+- `packages/opencode/test/cli/error.test.ts`, `packages/opencode/test/cli/run/stream.transport.test.ts` and `packages/opencode/test/cli/run/session-data.test.ts` — Add real `ContextOverflowError` instances, an overflow payload without `data.message`, and a check that generic errors keep their own messages.
+
+To check it by hand: start the interactive CLI with `opencode run --interactive`, choose a model with a small context window, and send a prompt well over its limit. The terminal should show the actionable message, with no provider text or JSON. Then send a short prompt to confirm the session still accepts input.
+
+Each Issue #13 acceptance criterion maps to one of these tests. They use the real formatters and runtime with no mocks, and the payload test fails without the `session-data.ts` fix (it printed "ContextOverflowError"), so it catches the bug it was written for.
 
 **Issue #15 — TUI conversation view:**
 - `packages/tui/test/cli/tui/assistant-message-error.test.tsx` — Renders the real error panel used by the conversation view. Checks that a context-overflow error shows the actionable message, that the raw provider message and response body never appear on screen, that an overflow error with an empty provider message still renders without crashing, that generic errors keep their own message, that aborted messages and messages without an error show no panel, and that at 40 columns the message wraps without splitting words.
@@ -157,6 +269,7 @@ In the desktop app, the agent switcher in the composer lists Learn as **Learn (t
 ### Automated tests
 - **`packages/app/src/utils/agent.test.ts`** checks that `agentLabel` labels Learn as a tutor and leaves other agents unchanged, and that `agentColor` gives Learn its own color for any letter case.
 - **`packages/app/src/i18n/parity.test.ts`** checks the new label exists in every locale.
+
 These cover the new logic. Listing and switching agents reuse unchanged code
 
 ### Learn Mode Is Read-Only (Issue #29)
