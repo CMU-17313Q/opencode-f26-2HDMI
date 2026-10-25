@@ -12,9 +12,7 @@ concurrency:
 
 jobs:
   build-and-deploy:
-    # The VM is only reachable from the CMU Qatar network, so the job runs on a
-    # self-hosted runner installed on the VM itself.
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
 
     steps:
       - name: Deploy via SSH
