@@ -1,0 +1,15 @@
+name: Gitleaks Secret Scan
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+    
+permissions:
+  contents: read
+
+jobs:
+  gitleaks:
+    name: Scan for exposed secrets
+    runs-on: ubuntu-latest
