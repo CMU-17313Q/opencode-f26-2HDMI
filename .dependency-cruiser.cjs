@@ -65,6 +65,9 @@ module.exports = {
     },
   ],
   options: {
+    // The built-in list comes from the runtime running depcruise. Bun 1.3.14 (pinned in
+    // packageManager, used in CI) does not list these, so not-to-unresolvable would flag them.
+    builtInModules: { add: ["node:sqlite", "sqlite", "bun:sqlite"] },
     doNotFollow: { path: "node_modules" },
     exclude: { path: "(^|/)(node_modules|test|generated-effect-test)/" },
     tsPreCompilationDeps: true,

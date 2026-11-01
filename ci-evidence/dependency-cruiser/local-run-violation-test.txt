@@ -9,7 +9,7 @@ export const bad = Api
 import { Api } from "@opencode-ai/server/api"
 export const bad = Api
 
-$ bun run check:deps
+$ bun run check:deps   # bun 1.3.14
 $ bun --bun node_modules/.bin/depcruise --config .dependency-cruiser.cjs packages/schema/src packages/core/src packages/protocol/src packages/server/src packages/client/src packages/sdk-next/src
 
   error schema-is-the-base-layer: packages/schema/src/__depcruise_violation.ts → packages/server/src/api.ts

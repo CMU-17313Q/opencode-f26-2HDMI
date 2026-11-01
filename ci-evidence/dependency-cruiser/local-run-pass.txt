@@ -1,4 +1,4 @@
-$ bun run check:deps   # dependency-cruiser 18.7.0, 2026-11-01T12:13Z
+$ bun run check:deps   # bun 1.3.14 (same as CI), dependency-cruiser 18.7.0, 2026-11-01T12:46Z
 $ bun --bun node_modules/.bin/depcruise --config .dependency-cruiser.cjs packages/schema/src packages/core/src packages/protocol/src packages/server/src packages/client/src packages/sdk-next/src
 
 ✔ no dependency violations found (539 modules, 2180 dependencies cruised)
