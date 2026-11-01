@@ -4,3 +4,11 @@ services:
     ports:
       - '127.0.0.1:4096:4096'
     restart: unless-stopped
+    environment:
+      # Passed in at runtime by the deploy workflow (GitHub secret), never baked into the image.
+      OPENROUTER_API_KEY: ${OPENROUTER_API_KEY:?OPENROUTER_API_KEY must be set}
+      # Default to an OpenRouter model and hide providers that have no key, so testers
+      # land on a working model. Override the model with the OPENCODE_MODEL repo variable.
+      OPENCODE_CONFIG_CONTENT: >-
+        {"model":"${OPENCODE_MODEL:-openrouter/openai/gpt-4o-mini}",
+        "enabled_providers":["openrouter"]}
