@@ -5,7 +5,7 @@ on:
     branches: [main]
   push:
     branches: [main]
-    
+
 permissions:
   contents: read
 
@@ -13,3 +13,73 @@ jobs:
   gitleaks:
     name: Scan for exposed secrets
     runs-on: ubuntu-latest
+
+    env:
+      GITLEAKS_VERSION: "8.30.1"
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event_name == 'pull_request' && format('refs/pull/{0}/merge', github.event.pull_request.number) || github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Install Gitleaks
+        run: |
+          set -euo pipefail
+
+          ARCHIVE="gitleaks_${GITLEAKS_VERSION}_linux_x64.tar.gz"
+          CHECKSUMS="gitleaks_${GITLEAKS_VERSION}_checksums.txt"
+          curl -sSfL "https://github.com/gitleaks/gitleaks/releases/download/v${GITLEAKS_VERSION}/${ARCHIVE}" -o "${ARCHIVE}"
+          curl -sSfL "https://github.com/gitleaks/gitleaks/releases/download/v${GITLEAKS_VERSION}/${CHECKSUMS}" -o "${CHECKSUMS}"
+          grep "  ${ARCHIVE}$" "${CHECKSUMS}" | sha256sum -c -
+          tar -xzf "${ARCHIVE}" gitleaks
+          sudo mv gitleaks /usr/local/bin/
+          rm "${ARCHIVE}" "${CHECKSUMS}"
+          gitleaks version | tee gitleaks-version.txt
+
+      - name: Scan commits for secrets
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          PUSH_BEFORE: ${{ github.event.before }}
+          PUSH_AFTER: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+
+          if [ "$EVENT_NAME" = "pull_request" ]; then
+            # GitHub checks out the PR merge commit; parent 1 is base and parent 2 is head.
+            BASE_SHA=$(git rev-parse HEAD^1)
+            HEAD_SHA=$(git rev-parse HEAD^2)
+            MERGE_BASE=$(git merge-base "$BASE_SHA" "$HEAD_SHA")
+            RANGE="${MERGE_BASE}..${HEAD_SHA}"
+          else
+            ZERO_SHA=0000000000000000000000000000000000000000
+
+            if [ "$PUSH_BEFORE" = "$ZERO_SHA" ] || \
+               ! git cat-file -e "${PUSH_BEFORE}^{commit}" 2>/dev/null; then
+              # Branch creation or an unavailable pre-force-push commit: scan new-tip history.
+              RANGE="$PUSH_AFTER"
+            else
+              RANGE="${PUSH_BEFORE}..${PUSH_AFTER}"
+            fi
+          fi
+
+          echo "Scanning Git range: $RANGE" | tee gitleaks.log
+          gitleaks git . \
+            --log-opts="$RANGE" \
+            --redact \
+            --report-format json \
+            --report-path gitleaks-report.json 2>&1 | tee -a gitleaks.log
+
+      - name: Upload Gitleaks report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gitleaks-report-${{ github.run_id }}
+          path: |
+            gitleaks-report.json
+            gitleaks-version.txt
+            gitleaks.log
+          if-no-files-found: warn
+          retention-days: 14
