@@ -1,0 +1,43 @@
+name: k6 Load Test
+
+on:
+  workflow_run:
+    workflows:
+      - VM Deploy OpenCode
+    types:
+      - completed
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  k6:
+    name: load-test
+    if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      SITE_URL: ${{ vars.SITE_URL || 'http://crs-17313-2hdmi.qatar.cmu.edu' }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install k6
+        uses: grafana/setup-k6-action@v1
+        with:
+          k6-version: v0.54.0
+
+      - name: Wait for the deployed site
+        run: |
+          for i in $(seq 1 24); do
+            if curl -fsS --max-time 10 "$SITE_URL/" >/dev/null; then
+              exit 0
+            fi
+            sleep 5
+          done
+          echo "site did not become ready: $SITE_URL"
+          exit 1
+
+      - name: Run k6
+        run: k6 run -e SITE_URL="$SITE_URL" load/k6/load-test.js
