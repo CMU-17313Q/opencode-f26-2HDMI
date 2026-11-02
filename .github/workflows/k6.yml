@@ -24,6 +24,7 @@ jobs:
           host: ${{ secrets.SERVER_IP }}
           username: ${{ secrets.SERVER_ADMIN }}
           password: ${{ secrets.ADMIN_PASSWORD }}
+          command_timeout: 15m
           script: |
             set -e
             cd ~/${{ secrets.REPO_NAME }}
