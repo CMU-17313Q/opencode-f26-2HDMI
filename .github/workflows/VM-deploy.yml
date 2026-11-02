@@ -21,10 +21,20 @@ jobs:
           host: ${{ secrets.SERVER_IP }}
           username: ${{ secrets.SERVER_ADMIN }}
           password: ${{ secrets.ADMIN_PASSWORD }}
+          command_timeout: 20m
           script: |
+            set -e
             cd ~/${{ secrets.REPO_NAME }}
             git fetch origin main
             git checkout main
             git pull origin main
-            docker compose down
             docker compose up -d --build
+            for i in $(seq 1 24); do
+              if curl -fsS --max-time 10 http://127.0.0.1:4096/ >/dev/null; then
+                exit 0
+              fi
+              sleep 5
+            done
+            echo "site did not become ready on 127.0.0.1:4096"
+            docker compose logs --tail 80
+            exit 1
