@@ -1,0 +1,49 @@
+name: ts-standard
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  ts-standard:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+        with:
+          fetch-depth: 0
+
+      - name: Setup Bun
+        uses: ./.github/actions/setup-bun
+
+      - name: Collect changed TypeScript files
+        id: files
+        run: |
+          base="${{ github.event.pull_request.base.sha || github.event.before }}"
+          files=$(git diff --name-only --diff-filter=ACMR "$base" HEAD \
+            | grep -E '^packages/opencode/(src|test)/.*\.tsx?$' \
+            | sed 's#^packages/opencode/##' | tr '\n' ' ' || true)
+          echo "list=$files" >> "$GITHUB_OUTPUT"
+          echo "Changed files: ${files:-none}"
+
+      - name: Run ts-standard (report-only)
+        working-directory: packages/opencode
+        run: |
+          if [ -z "${{ steps.files.outputs.list }}" ]; then
+            echo "No changed .ts/.tsx files in packages/opencode" | tee ts-standard-report.txt
+            exit 0
+          fi
+          bunx ts-standard --project tsconfig.ts-standard.json ${{ steps.files.outputs.list }} 2>&1 | tee ts-standard-report.txt || true
+
+      - name: Upload report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ts-standard-report
+          path: packages/opencode/ts-standard-report.txt
