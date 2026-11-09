@@ -1,0 +1,22 @@
+Deliberate violations added temporarily (removed afterwards, not committed):
+--- packages/client/src/__depcruise_violation.ts
+import { Config } from "@opencode-ai/core/config"
+export const bad = Config
+--- packages/schema/src/__depcruise_violation.ts
+import { Api } from "../../server/src/api"
+export const bad = Api
+--- packages/protocol/src/__depcruise_violation.ts
+import { Api } from "@opencode-ai/server/api"
+export const bad = Api
+
+$ bun run check:deps   # bun 1.3.14
+$ bun --bun node_modules/.bin/depcruise --config .dependency-cruiser.cjs packages/schema/src packages/core/src packages/protocol/src packages/server/src packages/client/src packages/sdk-next/src
+
+  error schema-is-the-base-layer: packages/schema/src/__depcruise_violation.ts → packages/server/src/api.ts
+  error not-to-unresolvable: packages/protocol/src/__depcruise_violation.ts → @opencode-ai/server/api
+  error client-runtime-only-schema-and-protocol: packages/client/src/__depcruise_violation.ts → packages/core/src/config.ts
+
+x 3 dependency violations (3 errors, 0 warnings). 543 modules, 2183 dependencies cruised.
+
+error: script "check:deps" exited with code 3
+exit code: 3

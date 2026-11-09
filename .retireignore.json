@@ -1,0 +1,16 @@
+[
+  {
+    "path": "@mixmark-io/domino/test",
+    "justification": "Old jQuery copies used only as test fixtures inside the domino library; never loaded by opencode"
+  },
+  {
+    "component": "axios",
+    "version": "1.16.1",
+    "justification": "Pulled in by the Slack SDK (@slack/bolt, @slack/web-api); fix is axios 1.21.0, tracked for a dependency upgrade"
+  },
+  {
+    "component": "DOMPurify",
+    "version": "3.3.1",
+    "justification": "Pinned in several packages; fix is DOMPurify 3.4.x, tracked for a dependency upgrade"
+  }
+]
