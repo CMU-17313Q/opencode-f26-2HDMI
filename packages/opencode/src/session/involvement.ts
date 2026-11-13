@@ -1,4 +1,4 @@
-import { parsePatch } from "diff"
+import { parsePatch, type StructuredPatchHunk } from "diff"
 import { FileDiff } from "@opencode-ai/schema/file-diff"
 
 export type LineRange = {
@@ -53,16 +53,33 @@ function rangesFromPatch(patch: string | undefined): LineRange[] {
   if (patch === undefined) return []
   const parsed = parsePatchSafe(patch)
   if (!parsed) return []
-  return parsed.flatMap((file) =>
-    file.hunks.flatMap((hunk) => {
-      const range =
-        hunk.newLines > 0
-          ? { start: hunk.newStart, end: hunk.newStart + hunk.newLines - 1 }
-          : { start: hunk.oldStart, end: hunk.oldStart + hunk.oldLines - 1 }
-      if (range.end < range.start) return []
-      return [range]
-    }),
-  )
+  return parsed.flatMap((file) => file.hunks.flatMap(changedRanges))
+}
+
+// Session patches are built with unlimited context, so one hunk can span the whole file.
+// Report only each run of changed lines: the new-file lines it inserts, or, for a run that
+// only deletes, the old-file lines it removes.
+function changedRanges(hunk: StructuredPatchHunk): LineRange[] {
+  const runs: { added: number[]; removed: number[] }[] = []
+  const cursor = { old: hunk.oldStart, new: hunk.newStart, inRun: false }
+  for (const line of hunk.lines) {
+    if (line.startsWith("\\")) continue
+    if (line.startsWith(" ")) {
+      cursor.old++
+      cursor.new++
+      cursor.inRun = false
+      continue
+    }
+    if (!cursor.inRun) runs.push({ added: [], removed: [] })
+    cursor.inRun = true
+    const run = runs[runs.length - 1]
+    if (line.startsWith("+")) run.added.push(cursor.new++)
+    if (line.startsWith("-")) run.removed.push(cursor.old++)
+  }
+  return runs.map((run) => {
+    const lines = run.added.length > 0 ? run.added : run.removed
+    return { start: lines[0], end: lines[lines.length - 1] }
+  })
 }
 
 function parsePatchSafe(patch: string) {

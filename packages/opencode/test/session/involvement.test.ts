@@ -12,7 +12,7 @@ describe("session involvement", () => {
 
     expect(
       SessionInvolvement.fromDiffs([{ file: "a.ts", patch, additions: 1, deletions: 1, status: "modified" }]),
-    ).toEqual([{ file: "a.ts", status: "modified", additions: 1, deletions: 1, ranges: [{ start: 1, end: 2 }] }])
+    ).toEqual([{ file: "a.ts", status: "modified", additions: 1, deletions: 1, ranges: [{ start: 2, end: 2 }] }])
   })
 
   test("maps a multi-hunk modified file", () => {
@@ -28,8 +28,8 @@ describe("session involvement", () => {
         additions: 1,
         deletions: 2,
         ranges: [
-          { start: 1, end: 2 },
-          { start: 345, end: 347 },
+          { start: 2, end: 2 },
+          { start: 346, end: 346 },
         ],
       },
     ])
@@ -48,9 +48,9 @@ describe("session involvement", () => {
       "",
     ].join("\n")
 
-    expect(SessionInvolvement.fromDiffs([{ file: "new.ts", patch, additions: 2, deletions: 0, status: "added" }])).toEqual(
-      [{ file: "new.ts", status: "added", additions: 2, deletions: 0, ranges: [{ start: 1, end: 2 }] }],
-    )
+    expect(
+      SessionInvolvement.fromDiffs([{ file: "new.ts", patch, additions: 2, deletions: 0, status: "added" }]),
+    ).toEqual([{ file: "new.ts", status: "added", additions: 2, deletions: 0, ranges: [{ start: 1, end: 2 }] }])
   })
 
   test("maps a deleted file to the old-file line range", () => {
@@ -81,7 +81,16 @@ describe("session involvement", () => {
 describe("session involvement report", () => {
   test("formats several files with totals and line ranges", () => {
     const text = SessionInvolvement.formatReport("ses_xxx", [
-      { file: "packages/app/src/foo.ts", status: "modified", additions: 42, deletions: 10, ranges: [{ start: 12, end: 40 }, { start: 88, end: 95 }] },
+      {
+        file: "packages/app/src/foo.ts",
+        status: "modified",
+        additions: 42,
+        deletions: 10,
+        ranges: [
+          { start: 12, end: 40 },
+          { start: 88, end: 95 },
+        ],
+      },
       { file: "packages/app/src/bar.ts", status: "added", additions: 0, deletions: 8, ranges: [{ start: 1, end: 60 }] },
       { file: "README.md", status: "deleted", additions: 0, deletions: 0, ranges: [] },
     ])
@@ -99,6 +108,8 @@ describe("session involvement report", () => {
   })
 
   test("formats an empty session without crashing", () => {
-    expect(SessionInvolvement.formatReport("ses_empty", [])).toBe("AI involvement — session ses_empty\n0 files, +0 / -0")
+    expect(SessionInvolvement.formatReport("ses_empty", [])).toBe(
+      "AI involvement — session ses_empty\n0 files, +0 / -0",
+    )
   })
 })
