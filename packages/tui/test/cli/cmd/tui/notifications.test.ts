@@ -248,7 +248,8 @@ describe("internal notifications TUI plugin", () => {
     expect(harness.notifications).toEqual([
       {
         title: "Demo session",
-        message: "Prompt exceeds model context. Shorten the conversation or start a new session.",
+        message:
+          "Your prompt is too large for this model's context window. Try shortening the conversation or starting a new session, then send the prompt again.",
         notification: { when: "blurred" },
         sound: { name: "error", when: "always" },
       },
