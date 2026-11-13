@@ -101,11 +101,13 @@ describe("session involvement properties", () => {
     )
   })
 
-  // R4 (Trailing blank line is harmless): An extra blank line at the end of a file does not change
-  // that file's name, status, or the line ranges of the real edit. The blank line itself may still
-  // be reported.
-  // Kind: metamorphic. Same edit with and without one extra blank line at the end: once the new last
-  // line is taken out of the second report, both reports must be equal, and + differs by exactly 1.
+  // R4 (Trailing blank line is harmless, revised in P4B): An extra blank line at the end of a file
+  // does not change that file's name or status. If the real edit does not reach the end of the file,
+  // its line ranges are unchanged. If it does reach the end, the blank line is reported as part of
+  // the edit's last range, and every earlier range is unchanged.
+  // Kind: metamorphic. Same edit with and without one extra blank line at the end: + differs by
+  // exactly 1. If the edit does not reach the end, the second report has the same ranges plus one
+  // range for the new blank line. Otherwise only the last range may grow to end at the blank line.
   test("R4: an extra blank line at the end does not change the real edit", () => {
     fc.assert(
       fc.property(
@@ -117,11 +119,19 @@ describe("session involvement properties", () => {
             toDiff(file, { ...edit, after: [...edit.after, ""], additions: edit.additions + 1 }),
           ])
           const last = edit.after.length + 1
+          // Unchanged lines are named `keep…`, so the edit reaches the end if either file ends in a changed line.
+          const reachesEnd = !edit.before.at(-1)?.startsWith("keep") || !edit.after.at(-1)?.startsWith("keep")
 
           expect(blank.file).toBe(plain.file)
           expect(blank.status).toBe(plain.status)
           expect(blank.additions).toBe(plain.additions + 1)
-          expect(withoutLine(blank.ranges, last)).toEqual(plain.ranges)
+          if (!reachesEnd) {
+            expect(blank.ranges).toEqual([...plain.ranges, { start: last, end: last }])
+            return
+          }
+          expect(blank.ranges).toHaveLength(plain.ranges.length)
+          expect(blank.ranges.slice(0, -1)).toEqual(plain.ranges.slice(0, -1))
+          expect(blank.ranges.at(-1)?.end).toBe(last)
         },
       ),
     )
@@ -207,15 +217,6 @@ function statusOf(edit: { before: string[]; after: string[] }) {
   if (edit.before.length === 0) return "added" as const
   if (edit.after.length === 0) return "deleted" as const
   return "modified" as const
-}
-
-// Removes one line number from a list of ranges (dropping a range that becomes empty).
-function withoutLine(ranges: SessionInvolvement.LineRange[], line: number) {
-  return ranges.flatMap((range) => {
-    if (range.start === line && range.end === line) return []
-    if (range.end === line) return [{ start: range.start, end: line - 1 }]
-    return [range]
-  })
 }
 
 const dir = mkdtemp(path.join(os.tmpdir(), "involvement-property-"))
