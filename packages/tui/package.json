@@ -12,6 +12,7 @@
   "exports": {
     ".": "./src/index.tsx",
     "./builtins": "./src/feature-plugins/builtins.ts",
+    "./feature-plugins/system/notifications": "./src/feature-plugins/system/notifications.ts",
     "./config": "./src/config/index.tsx",
     "./context/args": "./src/context/args.tsx",
     "./context/epilogue": "./src/context/epilogue.tsx",

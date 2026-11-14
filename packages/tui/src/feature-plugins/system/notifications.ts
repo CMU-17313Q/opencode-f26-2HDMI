@@ -1,6 +1,7 @@
 import type { Event } from "@opencode-ai/sdk/v2"
 import type { TuiAttentionSoundName, TuiPlugin, TuiPluginApi } from "@opencode-ai/plugin/tui"
 import type { BuiltinTuiPlugin } from "../builtins"
+import { SessionErrorMessage } from "@opencode-ai/core/session/error-message"
 
 const id = "internal:notifications"
 
@@ -17,10 +18,9 @@ function notify(api: TuiPluginApi, sessionID: string | undefined, message: strin
   })
 }
 
-function sessionErrorMessage(error: SessionError) {
-  if (error?.name === "ContextOverflowError") {
-    return "Prompt exceeds model context. Shorten the conversation or start a new session."
-  }
+export function sessionErrorMessage(error: SessionError) {
+  const contextOverflow = SessionErrorMessage.userFacingErrorMessage(error)
+  if (contextOverflow) return contextOverflow
   if (error?.name === "MessageAbortedError") return "Session aborted"
   const data = error?.data
   if (data && typeof data === "object" && "message" in data && data.message === "SSE read timed out") {

@@ -28,7 +28,12 @@ export function isOverflow(input: {
   if (input.cfg.compaction?.auto === false) return false
   if (input.model.limit.context === 0) return false
 
+  // A context smaller than the space reserved for the reply leaves no usable room. Treat it like an
+  // unknown limit instead of flagging every turn (even an empty one) for compaction.
+  const limit = usable(input)
+  if (limit === 0) return false
+
   const count =
     input.tokens.total || input.tokens.input + input.tokens.output + input.tokens.cache.read + input.tokens.cache.write
-  return count >= usable(input)
+  return count >= limit
 }

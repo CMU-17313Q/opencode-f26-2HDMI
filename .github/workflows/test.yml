@@ -64,6 +64,15 @@ jobs:
         # contention issue typecheck.yml already caps for tsgo.
         run: GITHUB_ACTIONS=false bun turbo test --concurrency=4
 
+      # Bun never names passing tests in CI logs (the scripts use --only-failures, and non-TTY output
+      # hides passes), so run the property tests again and list each passing one from the JUnit report.
+      - name: Run property tests
+        timeout-minutes: 5
+        working-directory: packages/opencode
+        run: |
+          bun test --timeout 30000 --reporter=junit --reporter-outfile="$RUNNER_TEMP/property-tests.xml" test/session/context-overflow.property.test.ts
+          grep -o '<testcase name="[^"]*"' "$RUNNER_TEMP/property-tests.xml" | sed 's/<testcase name="/passed: /; s/"$//'
+
       - name: Check generated client
         timeout-minutes: 5
         working-directory: packages/client
