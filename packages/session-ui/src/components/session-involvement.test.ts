@@ -21,8 +21,8 @@ describe("session involvement", () => {
         additions: 1,
         deletions: 2,
         lineRanges: [
-          { start: 1, end: 2 },
-          { start: 345, end: 347 },
+          { start: 2, end: 2 },
+          { start: 346, end: 346 },
         ],
       },
     ])

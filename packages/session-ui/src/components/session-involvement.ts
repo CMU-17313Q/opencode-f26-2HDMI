@@ -40,13 +40,29 @@ function deriveStatus(patch: string | undefined): "added" | "deleted" | "modifie
 }
 
 function hunkRanges(view: ViewDiff): SessionInvolvementLineRange[] {
-  return view.fileDiff.hunks
-    .map((hunk) =>
-      hunk.additionCount > 0
-        ? { start: hunk.additionStart, end: hunk.additionStart + hunk.additionCount - 1 }
-        : { start: hunk.deletionStart, end: hunk.deletionStart + hunk.deletionCount - 1 },
-    )
-    .filter((range) => range.end >= range.start)
+  return view.fileDiff.hunks.flatMap(changedRanges)
+}
+
+// A hunk also contains unchanged context lines around each change (a whole file
+// for full-context patches), so report only each change block inside it: the
+// new-file lines it adds, or, for a block that only deletes, the old-file lines
+// it removes.
+function changedRanges(hunk: ViewDiff["fileDiff"]["hunks"][number]): SessionInvolvementLineRange[] {
+  const cursor = { addition: hunk.additionStart, deletion: hunk.deletionStart }
+  return hunk.hunkContent.flatMap((content) => {
+    if (content.type === "context") {
+      cursor.addition += content.lines
+      cursor.deletion += content.lines
+      return []
+    }
+    const range =
+      content.additions > 0
+        ? { start: cursor.addition, end: cursor.addition + content.additions - 1 }
+        : { start: cursor.deletion, end: cursor.deletion + content.deletions - 1 }
+    cursor.addition += content.additions
+    cursor.deletion += content.deletions
+    return [range]
+  })
 }
 
 export function toSessionInvolvementMarkdown(rows: SessionInvolvementRow[]): string {
