@@ -74,3 +74,15 @@ test("R3: an edit that is undone leaves the summary unchanged", () => {
     }),
   )
 })
+
+// R4: The summary depends only on the final changes, not on the order the agent made them in.
+// Kind: metamorphic. Shuffling the same diffs (the agent edited the files in another order)
+// must give an identical Download file, including the order of the files.
+test("R4: the same changes in a different order give the same summary", () => {
+  fc.assert(
+    fc.property(session.chain((c) => fc.tuple(fc.constant(c), fc.shuffledSubarray(c, { minLength: c.length }))), ([changes, shuffled]) => {
+      const summary = (list: Change[]) => toSessionInvolvementMarkdown(toSessionInvolvementRows(list.map(toDiff)))
+      expect(summary(shuffled)).toBe(summary(changes))
+    }),
+  )
+})
