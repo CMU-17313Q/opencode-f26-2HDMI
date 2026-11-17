@@ -50,11 +50,11 @@ test("R2: status and +/- counts match a simple line-diff oracle", () => {
     fc.property(session, fc.boolean(), (changes, dropStatus) => {
       const diffs = changes.map(toDiff).map((d) => (dropStatus ? { ...d, status: undefined } : d))
       const rows = toSessionInvolvementRows(diffs)
-      changes.forEach((c, i) => {
+      changes.forEach((c) => {
         const parts = diffLines(c.before, c.after)
         const count = (key: "added" | "removed") => parts.filter((p) => p[key]).reduce((n, p) => n + (p.count ?? 0), 0)
         const status = dropStatus ? "modified" : statusOf(c)
-        expect(rows[i]).toMatchObject({ status, additions: count("added"), deletions: count("removed") })
+        expect(rows.find((r) => r.file === c.file)).toMatchObject({ status, additions: count("added"), deletions: count("removed") })
       })
     }),
   )
