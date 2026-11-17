@@ -1,7 +1,7 @@
 import { expect, test } from "bun:test"
 import fc from "fast-check"
 import { diffLines, formatPatch, structuredPatch } from "diff"
-import { toSessionInvolvementRows, type SessionInvolvementDiff } from "./session-involvement"
+import { toSessionInvolvementMarkdown, toSessionInvolvementRows, type SessionInvolvementDiff } from "./session-involvement"
 
 // Generators. File contents use a few short, often repeated lines so edits land next to
 // each other and repeat. Diffs are built like the server's snapshot diffs (one full-context
@@ -56,6 +56,21 @@ test("R2: status and +/- counts match a simple line-diff oracle", () => {
         const status = dropStatus ? "modified" : statusOf(c)
         expect(rows[i]).toMatchObject({ status, additions: count("added"), deletions: count("removed") })
       })
+    }),
+  )
+})
+
+// R3: A change that is undone in the same session, so the file ends exactly as it started,
+// does not appear in the summary.
+// Kind: round-trip. Edit a file and undo it: its diff has the same content on both sides
+// (+0 -0, no hunks). Adding that diff must leave the rows and the Download file unchanged.
+test("R3: an edit that is undone leaves the summary unchanged", () => {
+  fc.assert(
+    fc.property(session, content, (changes, text) => {
+      const undone = toDiff({ file: "undone.ts", before: text, after: text, existence: false })
+      const summary = (diffs: SessionInvolvementDiff[]) => toSessionInvolvementMarkdown(toSessionInvolvementRows(diffs))
+      const diffs = changes.map(toDiff)
+      expect(summary([...diffs, undone])).toBe(summary(diffs))
     }),
   )
 })
