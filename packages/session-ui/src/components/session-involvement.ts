@@ -18,7 +18,16 @@ export type SessionInvolvementRow = {
 }
 
 export function toSessionInvolvementRows(diffs: SessionInvolvementDiff[]): SessionInvolvementRow[] {
-  return diffs.map(toRow)
+  const rows = diffs.flatMap((diff) => {
+    const row = toRow(diff)
+    // An edit that was undone has the same content on both sides: a patch with no hunks
+    // and no +/- lines. Binary files have an empty patch instead, so they stay listed.
+    const undone = !!diff.patch && row.additions === 0 && row.deletions === 0 && row.lineRanges.length === 0
+    return undone ? [] : [row]
+  })
+  // Sort by path so the same changes always give the same summary, whatever order the
+  // agent made them in. A plain comparison keeps the order the same on every machine.
+  return rows.sort((a, b) => (a.file < b.file ? -1 : a.file > b.file ? 1 : 0))
 }
 
 function toRow(diff: SessionInvolvementDiff): SessionInvolvementRow {
