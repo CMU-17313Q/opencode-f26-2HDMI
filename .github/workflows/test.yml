@@ -63,6 +63,14 @@ jobs:
         # vCPUs across 5 packages' test tasks running at once — same
         # contention issue typecheck.yml already caps for tsgo.
         run: GITHUB_ACTIONS=false bun turbo test --concurrency=4
+        # Bun never names passing tests in CI logs (the package test script uses --only-failures),
+      # so run the involvement summary property tests again and list each passing one by name.
+      - name: Run session-ui property tests
+        timeout-minutes: 5
+        working-directory: packages/session-ui
+        run: |
+          bun test --reporter=junit --reporter-outfile="$RUNNER_TEMP/session-ui-property-tests.xml" src/components/session-involvement.property.test.ts
+          grep -o '<testcase name="[^"]*"' "$RUNNER_TEMP/session-ui-property-tests.xml" | sed 's/<testcase name="/passed: /; s/"$//'
 
       - name: Check generated client
         timeout-minutes: 5
